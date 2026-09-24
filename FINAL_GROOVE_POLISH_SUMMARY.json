@@ -1,0 +1,20 @@
+{
+  "final": "uber_sound_solution_arpsid_final_groove_polish_prg_enabled",
+  "kick_filter_punch": true,
+  "big_hit_filter_pop": true,
+  "bass_pwm": "MusicStep + EffectPhase",
+  "lead_pwm": "counter-motion",
+  "acid_lfo": "smoothed/widened",
+  "music_theory_fix": true,
+  "post_fix_non_scale_notes": 0,
+  "hard_acid": true,
+  "no_intro": true,
+  "extended_peak": true,
+  "patterns": 60,
+  "pointer_entries": 61,
+  "h_order_bytes": 289,
+  "message_bytes": 37,
+  "asset_end": "$9f58",
+  "margin_to_a000_bytes": 168,
+  "prg_generation_enabled": true
+}

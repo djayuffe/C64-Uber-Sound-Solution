@@ -1,0 +1,9 @@
+{
+  "default_asset": "uber_sound_solution",
+  "conversion_mode": "uploaded_logo_arpsid_eyecandy",
+  "sha256_bitmap_screen_color": "198fe320b813658812b0f623f52b994189a3b4e45f3920116b469581f374b5aa",
+  "layout": {
+    "bitmap": "y=0..159",
+    "arpsid_sine_text": "y=160..199"
+  }
+}

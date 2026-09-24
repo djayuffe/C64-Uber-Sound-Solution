@@ -1,0 +1,2041 @@
+============================================================================
+ BERLIN - A TRIP TO THE GOLDEN HEART HOTEL   ::   MUSIC DATA / ALL NODES
+ true-SID techno player (fix18 engine) - C64 / MOS8580 - 50Hz
+============================================================================
+
+ENGINE
+  voices : V1 = bass   V2 = acid/lead/arp   V3 = drums
+  format : each section = 256 rows = 16 bars x 16 steps (1/16 notes)
+  cycle  : slots 2,3,...,15 then 1  (15 sections, ~25s each on song-loop)
+  notes  : bass/arp values are SID freq-table indices shown as note names
+           (octave approximate) .  '..' = rest/gate-off (true staccato)
+  drums  : KK=kick  hh=hat  CL=clap  ..=none
+  filt   : per-row cutoff base; engine adds a 0..63 LFO (FiltStep) on top,
+           saturates at $f0 -> the audible filter sweep
+  waves  : SAW $21 . PULSE $41 . TRI $11 . TRI+RING $15 . TRI+SYNC $13 .
+           SAW+PULSE $61  (combined waveforms, 8580)
+
+----------------------------------------------------------------------------
+SLOT 1   AFTERHOURS  "after-hours / soft pad comedown"
+----------------------------------------------------------------------------
+  bass wave : SAW            arp wave : TRI
+  speed     : 6 ticks/row    res8 route[V1]   LP vol15
+  bass ADSR : atk0 dec9 / sus10 rel8
+  arp  ADSR : atk0 dec8 / sus15 rel10
+  pwm base/step : $06 / $01     filt LFO step : $02
+  filter cutoff range : $30 .. $3f
+
+  core loop (bars 0-3, 16 steps each):
+   bar0 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: A0 .. .. .. .. .. .. .. A1 .. .. .. .. .. .. ..
+        lead: A3 .. .. .. .. .. .. .. A3 .. .. .. .. .. .. ..
+        drum: KK .. hh .. KK .. .. .. KK .. hh .. KK .. .. ..
+
+   bar1 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: A0 .. .. .. .. .. .. .. A1 .. .. .. .. .. .. ..
+        lead: A3 .. .. .. .. .. .. .. A3 .. .. .. .. .. .. ..
+        drum: KK .. hh .. KK .. .. .. KK .. hh .. KK .. .. ..
+
+   bar2 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: F1 .. .. .. .. .. .. .. F2 .. .. .. .. .. .. ..
+        lead: F4 .. .. .. .. .. .. .. F4 .. .. .. .. .. .. ..
+        drum: KK .. hh .. KK .. .. .. KK .. hh .. KK .. .. ..
+
+   bar3 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: A0 .. .. .. .. .. .. .. A1 .. .. .. .. .. .. ..
+        lead: A3 .. .. .. .. .. .. .. A3 .. .. .. .. .. .. ..
+        drum: KK .. hh .. KK .. .. .. KK .. hh .. KK .. .. ..
+
+  full raw dump (hex, all 16 bars):
+   BASS:
+     09 ff ff ff ff ff ff ff 15 ff ff ff ff ff ff ff
+     09 ff ff ff ff ff ff ff 15 ff ff ff ff ff ff ff
+     11 ff ff ff ff ff ff ff 1d ff ff ff ff ff ff ff
+     09 ff ff ff ff ff ff ff 15 ff ff ff ff ff ff ff
+     09 ff ff ff ff ff ff ff 15 ff ff ff ff ff ff ff
+     09 ff ff ff ff ff ff ff 15 ff ff ff ff ff ff ff
+     11 ff ff ff ff ff ff ff 1d ff ff ff ff ff ff ff
+     09 ff ff ff ff ff ff ff 15 ff ff ff ff ff ff ff
+     09 ff ff ff ff ff ff ff 15 ff ff ff ff ff ff ff
+     09 ff ff ff ff ff ff ff 15 ff ff ff ff ff ff ff
+     11 ff ff ff ff ff ff ff 1d ff ff ff ff ff ff ff
+     09 ff ff ff ff ff ff ff 15 ff ff ff ff ff ff ff
+     09 ff ff ff ff ff ff ff 15 ff ff ff ff ff ff ff
+     09 ff ff ff ff ff ff ff 15 ff ff ff ff ff ff ff
+     11 ff ff ff ff ff ff ff 1d ff ff ff ff ff ff ff
+     09 ff ff ff ff ff ff ff 15 ff ff ff ff ff ff ff
+   ARP0:
+     2d ff ff ff ff ff ff ff 2d ff ff ff ff ff ff ff
+     2d ff ff ff ff ff ff ff 2d ff ff ff ff ff ff ff
+     35 ff ff ff ff ff ff ff 35 ff ff ff ff ff ff ff
+     2d ff ff ff ff ff ff ff 2d ff ff ff ff ff ff ff
+     2d ff ff ff ff ff ff ff 2d ff ff ff ff ff ff ff
+     2d ff ff ff ff ff ff ff 2d ff ff ff ff ff ff ff
+     35 ff ff ff ff ff ff ff 35 ff ff ff ff ff ff ff
+     2d ff ff ff ff ff ff ff 2d ff ff ff ff ff ff ff
+     2d ff ff ff ff ff ff ff 2d ff ff ff ff ff ff ff
+     2d ff ff ff ff ff ff ff 2d ff ff ff ff ff ff ff
+     35 ff ff ff ff ff ff ff 35 ff ff ff ff ff ff ff
+     2d ff ff ff ff ff ff ff 2d ff ff ff ff ff ff ff
+     2d ff ff ff ff ff ff ff 2d ff ff ff ff ff ff ff
+     2d ff ff ff ff ff ff ff 2d ff ff ff ff ff ff ff
+     35 ff ff ff ff ff ff ff 35 ff ff ff ff ff ff ff
+     2d ff ff ff ff ff ff ff 2d ff ff ff ff ff ff ff
+   ARP1:
+     30 ff ff ff ff ff ff ff 30 ff ff ff ff ff ff ff
+     30 ff ff ff ff ff ff ff 30 ff ff ff ff ff ff ff
+     39 ff ff ff ff ff ff ff 39 ff ff ff ff ff ff ff
+     30 ff ff ff ff ff ff ff 30 ff ff ff ff ff ff ff
+     30 ff ff ff ff ff ff ff 30 ff ff ff ff ff ff ff
+     30 ff ff ff ff ff ff ff 30 ff ff ff ff ff ff ff
+     39 ff ff ff ff ff ff ff 39 ff ff ff ff ff ff ff
+     30 ff ff ff ff ff ff ff 30 ff ff ff ff ff ff ff
+     30 ff ff ff ff ff ff ff 30 ff ff ff ff ff ff ff
+     30 ff ff ff ff ff ff ff 30 ff ff ff ff ff ff ff
+     39 ff ff ff ff ff ff ff 39 ff ff ff ff ff ff ff
+     30 ff ff ff ff ff ff ff 30 ff ff ff ff ff ff ff
+     30 ff ff ff ff ff ff ff 30 ff ff ff ff ff ff ff
+     30 ff ff ff ff ff ff ff 30 ff ff ff ff ff ff ff
+     39 ff ff ff ff ff ff ff 39 ff ff ff ff ff ff ff
+     30 ff ff ff ff ff ff ff 30 ff ff ff ff ff ff ff
+   ARP2:
+     34 ff ff ff ff ff ff ff 34 ff ff ff ff ff ff ff
+     34 ff ff ff ff ff ff ff 34 ff ff ff ff ff ff ff
+     3c ff ff ff ff ff ff ff 3c ff ff ff ff ff ff ff
+     34 ff ff ff ff ff ff ff 34 ff ff ff ff ff ff ff
+     34 ff ff ff ff ff ff ff 34 ff ff ff ff ff ff ff
+     34 ff ff ff ff ff ff ff 34 ff ff ff ff ff ff ff
+     3c ff ff ff ff ff ff ff 3c ff ff ff ff ff ff ff
+     34 ff ff ff ff ff ff ff 34 ff ff ff ff ff ff ff
+     34 ff ff ff ff ff ff ff 34 ff ff ff ff ff ff ff
+     34 ff ff ff ff ff ff ff 34 ff ff ff ff ff ff ff
+     3c ff ff ff ff ff ff ff 3c ff ff ff ff ff ff ff
+     34 ff ff ff ff ff ff ff 34 ff ff ff ff ff ff ff
+     34 ff ff ff ff ff ff ff 34 ff ff ff ff ff ff ff
+     34 ff ff ff ff ff ff ff 34 ff ff ff ff ff ff ff
+     3c ff ff ff ff ff ff ff 3c ff ff ff ff ff ff ff
+     34 ff ff ff ff ff ff ff 34 ff ff ff ff ff ff ff
+   DRUM:
+     01 00 02 00 01 00 00 00 01 00 02 00 01 00 00 00
+     01 00 02 00 01 00 00 00 01 00 02 00 01 00 00 00
+     01 00 02 00 01 00 00 00 01 00 02 00 01 00 00 00
+     01 00 02 00 01 00 00 00 01 00 02 00 01 00 00 00
+     01 00 02 00 01 00 00 00 01 00 02 00 01 00 00 00
+     01 00 02 00 01 00 00 00 01 00 02 00 01 00 00 00
+     01 00 02 00 01 00 00 00 01 00 02 00 01 00 00 00
+     01 00 02 00 01 00 00 00 01 00 02 00 01 00 00 00
+     01 00 02 00 01 00 00 00 01 00 02 00 01 00 00 00
+     01 00 02 00 01 00 00 00 01 00 02 00 01 00 00 00
+     01 00 02 00 01 00 00 00 01 00 02 00 01 00 00 00
+     01 00 02 00 01 00 00 00 01 00 02 00 01 00 00 00
+     01 00 02 00 01 00 00 00 01 00 02 00 01 00 00 00
+     01 00 02 00 01 00 00 00 01 00 02 00 01 00 00 00
+     01 00 02 00 01 00 00 00 01 00 02 00 01 00 00 00
+     01 00 02 00 01 00 00 00 01 00 02 00 01 00 00 00
+   FILT:
+     30 30 30 30 30 30 30 30 30 30 30 30 30 30 30 30
+     31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31
+     32 32 32 32 32 32 32 32 32 32 32 32 32 32 32 32
+     33 33 33 33 33 33 33 33 33 33 33 33 33 33 33 33
+     34 34 34 34 34 34 34 34 34 34 34 34 34 34 34 34
+     35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35
+     36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36
+     37 37 37 37 37 37 37 37 37 37 37 37 37 37 37 37
+     38 38 38 38 38 38 38 38 38 38 38 38 38 38 38 38
+     39 39 39 39 39 39 39 39 39 39 39 39 39 39 39 39
+     3a 3a 3a 3a 3a 3a 3a 3a 3a 3a 3a 3a 3a 3a 3a 3a
+     3b 3b 3b 3b 3b 3b 3b 3b 3b 3b 3b 3b 3b 3b 3b 3b
+     3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c
+     3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d
+     3e 3e 3e 3e 3e 3e 3e 3e 3e 3e 3e 3e 3e 3e 3e 3e
+     3f 3f 3f 3f 3f 3f 3f 3f 3f 3f 3f 3f 3f 3f 3f 3f
+
+----------------------------------------------------------------------------
+SLOT 2   BERLINA     "departure / hypnotic"
+----------------------------------------------------------------------------
+  bass wave : SAW            arp wave : PULSE
+  speed     : 5 ticks/row    res15 route[V1]   LP vol15
+  bass ADSR : atk0 dec8 / sus7 rel8
+  arp  ADSR : atk0 dec0 / sus4 rel8
+  pwm base/step : $04 / $02     filt LFO step : $04
+  filter cutoff range : $46 .. $5f
+
+  core loop (bars 0-3, 16 steps each):
+   bar0 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: A0 .. .. A1 A1 .. .. .. A2 .. .. A1 A1 .. A2 ..
+        lead: .. .. .. .. .. .. A3 .. .. .. .. .. .. .. A3 ..
+        drum: KK .. hh .. KK .. hh .. KK .. hh .. KK .. hh ..
+
+   bar1 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: A0 .. .. A1 A1 .. .. .. A2 .. .. A1 A1 .. A2 ..
+        lead: .. .. .. .. .. .. A3 .. .. .. .. .. .. .. A3 ..
+        drum: KK .. hh .. KK .. hh .. KK .. hh .. KK .. hh ..
+
+   bar2 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: A0 .. .. A1 A1 .. .. .. A2 .. .. A1 A1 .. A2 ..
+        lead: .. .. .. .. .. .. A3 .. .. .. .. .. .. .. A3 ..
+        drum: KK .. hh .. KK .. hh .. KK .. hh .. KK .. hh ..
+
+   bar3 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: F1 .. .. F2 F2 .. .. .. F3 .. .. F2 F2 .. F3 ..
+        lead: .. .. .. .. .. .. F4 .. .. .. .. .. .. .. F4 ..
+        drum: KK .. hh .. KK .. hh .. KK .. hh .. KK .. hh ..
+
+  full raw dump (hex, all 16 bars):
+   BASS:
+     09 ff ff 15 15 ff ff ff 21 ff ff 15 15 ff 21 ff
+     09 ff ff 15 15 ff ff ff 21 ff ff 15 15 ff 21 ff
+     09 ff ff 15 15 ff ff ff 21 ff ff 15 15 ff 21 ff
+     11 ff ff 1d 1d ff ff ff 29 ff ff 1d 1d ff 29 ff
+     09 ff ff 15 15 ff ff ff 21 ff ff 15 15 ff 21 ff
+     09 ff ff 15 15 ff ff ff 21 ff ff 15 15 ff 21 ff
+     09 ff ff 15 15 ff ff ff 21 ff ff 15 15 ff 21 ff
+     11 ff ff 1d 1d ff ff ff 29 ff ff 1d 1d ff 29 ff
+     09 ff ff 15 15 ff ff ff 21 ff ff 15 15 ff 21 ff
+     09 ff ff 15 15 ff ff ff 21 ff ff 15 15 ff 21 ff
+     09 ff ff 15 15 ff ff ff 21 ff ff 15 15 ff 21 ff
+     11 ff ff 1d 1d ff ff ff 29 ff ff 1d 1d ff 29 ff
+     09 ff ff 15 15 ff ff ff 21 ff ff 15 15 ff 21 ff
+     09 ff ff 15 15 ff ff ff 21 ff ff 15 15 ff 21 ff
+     09 ff ff 15 15 ff ff ff 21 ff ff 15 15 ff 21 ff
+     11 ff ff 1d 1d ff ff ff 29 ff ff 1d 1d ff 29 ff
+   ARP0:
+     ff ff ff ff ff ff 2d ff ff ff ff ff ff ff 2d ff
+     ff ff ff ff ff ff 2d ff ff ff ff ff ff ff 2d ff
+     ff ff ff ff ff ff 2d ff ff ff ff ff ff ff 2d ff
+     ff ff ff ff ff ff 35 ff ff ff ff ff ff ff 35 ff
+     ff ff ff ff ff ff 2d ff ff ff ff ff ff ff 2d ff
+     ff ff ff ff ff ff 2d ff ff ff ff ff ff ff 2d ff
+     ff ff ff ff ff ff 2d ff ff ff ff ff ff ff 2d ff
+     ff ff ff ff ff ff 35 ff ff ff ff ff ff ff 35 ff
+     ff ff ff ff ff ff 2d ff ff ff ff ff ff ff 2d ff
+     ff ff ff ff ff ff 2d ff ff ff ff ff ff ff 2d ff
+     ff ff ff ff ff ff 2d ff ff ff ff ff ff ff 2d ff
+     ff ff ff ff ff ff 35 ff ff ff ff ff ff ff 35 ff
+     ff ff ff ff ff ff 2d ff ff ff ff ff ff ff 2d ff
+     ff ff ff ff ff ff 2d ff ff ff ff ff ff ff 2d ff
+     ff ff ff ff ff ff 2d ff ff ff ff ff ff ff 2d ff
+     ff ff ff ff ff ff 35 ff ff ff ff ff ff ff 35 ff
+   ARP1:
+     ff ff ff ff ff ff 30 ff ff ff ff ff ff ff 30 ff
+     ff ff ff ff ff ff 30 ff ff ff ff ff ff ff 30 ff
+     ff ff ff ff ff ff 30 ff ff ff ff ff ff ff 30 ff
+     ff ff ff ff ff ff 39 ff ff ff ff ff ff ff 39 ff
+     ff ff ff ff ff ff 30 ff ff ff ff ff ff ff 30 ff
+     ff ff ff ff ff ff 30 ff ff ff ff ff ff ff 30 ff
+     ff ff ff ff ff ff 30 ff ff ff ff ff ff ff 30 ff
+     ff ff ff ff ff ff 39 ff ff ff ff ff ff ff 39 ff
+     ff ff ff ff ff ff 30 ff ff ff ff ff ff ff 30 ff
+     ff ff ff ff ff ff 30 ff ff ff ff ff ff ff 30 ff
+     ff ff ff ff ff ff 30 ff ff ff ff ff ff ff 30 ff
+     ff ff ff ff ff ff 39 ff ff ff ff ff ff ff 39 ff
+     ff ff ff ff ff ff 30 ff ff ff ff ff ff ff 30 ff
+     ff ff ff ff ff ff 30 ff ff ff ff ff ff ff 30 ff
+     ff ff ff ff ff ff 30 ff ff ff ff ff ff ff 30 ff
+     ff ff ff ff ff ff 39 ff ff ff ff ff ff ff 39 ff
+   ARP2:
+     ff ff ff ff ff ff 34 ff ff ff ff ff ff ff 34 ff
+     ff ff ff ff ff ff 34 ff ff ff ff ff ff ff 34 ff
+     ff ff ff ff ff ff 34 ff ff ff ff ff ff ff 34 ff
+     ff ff ff ff ff ff 3c ff ff ff ff ff ff ff 3c ff
+     ff ff ff ff ff ff 34 ff ff ff ff ff ff ff 34 ff
+     ff ff ff ff ff ff 34 ff ff ff ff ff ff ff 34 ff
+     ff ff ff ff ff ff 34 ff ff ff ff ff ff ff 34 ff
+     ff ff ff ff ff ff 3c ff ff ff ff ff ff ff 3c ff
+     ff ff ff ff ff ff 34 ff ff ff ff ff ff ff 34 ff
+     ff ff ff ff ff ff 34 ff ff ff ff ff ff ff 34 ff
+     ff ff ff ff ff ff 34 ff ff ff ff ff ff ff 34 ff
+     ff ff ff ff ff ff 3c ff ff ff ff ff ff ff 3c ff
+     ff ff ff ff ff ff 34 ff ff ff ff ff ff ff 34 ff
+     ff ff ff ff ff ff 34 ff ff ff ff ff ff ff 34 ff
+     ff ff ff ff ff ff 34 ff ff ff ff ff ff ff 34 ff
+     ff ff ff ff ff ff 3c ff ff ff ff ff ff ff 3c ff
+   DRUM:
+     01 00 02 00 01 00 02 00 01 00 02 00 01 00 02 00
+     01 00 02 00 01 00 02 00 01 00 02 00 01 00 02 00
+     01 00 02 00 01 00 02 00 01 00 02 00 01 00 02 00
+     01 00 02 00 01 00 02 00 01 00 02 00 01 00 02 00
+     01 00 02 00 01 00 02 00 01 00 02 00 01 00 02 00
+     01 00 02 00 01 00 02 00 01 00 02 00 01 00 02 00
+     01 00 02 00 01 00 02 00 01 00 02 00 01 00 02 00
+     01 00 02 00 01 00 02 00 01 00 02 00 01 00 02 00
+     01 00 02 00 01 00 02 00 01 00 02 00 01 00 02 00
+     01 00 02 00 01 00 02 00 01 00 02 00 01 00 02 00
+     01 00 02 00 01 00 02 00 01 00 02 00 01 00 02 00
+     01 00 02 00 01 00 02 00 01 00 02 00 01 00 02 00
+     01 00 02 00 01 00 02 00 01 00 02 00 01 00 02 00
+     01 00 02 00 01 00 02 00 01 00 02 00 01 00 02 00
+     01 00 02 00 01 00 02 00 01 00 02 00 01 00 02 00
+     01 00 02 00 01 00 02 00 01 00 02 00 01 00 02 00
+   FILT:
+     46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46
+     48 48 48 48 48 48 48 48 48 48 48 48 48 48 48 48
+     4a 4a 4a 4a 4a 4a 4a 4a 4a 4a 4a 4a 4a 4a 4a 4a
+     4c 4c 4c 4c 4c 4c 4c 4c 4c 4c 4c 4c 4c 4c 4c 4c
+     4e 4e 4e 4e 4e 4e 4e 4e 4e 4e 4e 4e 4e 4e 4e 4e
+     50 50 50 50 50 50 50 50 50 50 50 50 50 50 50 50
+     52 52 52 52 52 52 52 52 52 52 52 52 52 52 52 52
+     54 54 54 54 54 54 54 54 54 54 54 54 54 54 54 54
+     56 56 56 56 56 56 56 56 56 56 56 56 56 56 56 56
+     58 58 58 58 58 58 58 58 58 58 58 58 58 58 58 58
+     5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a
+     5c 5c 5c 5c 5c 5c 5c 5c 5c 5c 5c 5c 5c 5c 5c 5c
+     5e 5e 5e 5e 5e 5e 5e 5e 5e 5e 5e 5e 5e 5e 5e 5e
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+
+----------------------------------------------------------------------------
+SLOT 3   BERLINB     "journey / peak"
+----------------------------------------------------------------------------
+  bass wave : SAW            arp wave : PULSE
+  speed     : 5 ticks/row    res15 route[V1]   LP vol15
+  bass ADSR : atk0 dec8 / sus6 rel8
+  arp  ADSR : atk0 dec0 / sus6 rel8
+  pwm base/step : $04 / $03     filt LFO step : $05
+  filter cutoff range : $5f .. $5f
+
+  core loop (bars 0-3, 16 steps each):
+   bar0 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: A0 .. A2 A1 A1 .. A2 A1 A0 .. A2 A1 A1 .. A2 E2
+        lead: .. .. A3 .. .. .. A3 A4 .. .. A3 .. .. .. A3 A4
+        drum: KK hh hh hh CL hh hh hh KK hh hh hh CL hh hh hh
+
+   bar1 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: F1 .. F3 F2 F2 .. F3 F2 F1 .. F3 F2 F2 .. F3 C3
+        lead: .. .. F4 .. .. .. F4 F5 .. .. F4 .. .. .. F4 F5
+        drum: KK hh hh hh CL hh hh hh KK hh hh hh CL hh hh hh
+
+   bar2 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: G1 .. G3 G2 G2 .. G3 G2 G1 .. G3 G2 G2 .. G3 D3
+        lead: .. .. G4 .. .. .. G4 G5 .. .. G4 .. .. .. G4 G5
+        drum: KK hh hh hh CL hh hh hh KK hh hh hh CL hh hh hh
+
+   bar3 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: A0 .. A2 A1 A1 .. A2 A1 A0 .. A2 A1 A1 .. A2 E2
+        lead: .. .. A3 .. .. .. A3 A4 .. .. A3 .. .. .. A3 A4
+        drum: KK hh hh hh CL hh hh hh KK hh hh hh CL hh hh hh
+
+  full raw dump (hex, all 16 bars):
+   BASS:
+     09 ff 21 15 15 ff 21 15 09 ff 21 15 15 ff 21 1c
+     11 ff 29 1d 1d ff 29 1d 11 ff 29 1d 1d ff 29 24
+     13 ff 2b 1f 1f ff 2b 1f 13 ff 2b 1f 1f ff 2b 26
+     09 ff 21 15 15 ff 21 15 09 ff 21 15 15 ff 21 1c
+     09 ff 21 15 15 ff 21 15 09 ff 21 15 15 ff 21 1c
+     11 ff 29 1d 1d ff 29 1d 11 ff 29 1d 1d ff 29 24
+     13 ff 2b 1f 1f ff 2b 1f 13 ff 2b 1f 1f ff 2b 26
+     09 ff 21 15 15 ff 21 15 09 ff 21 15 15 ff 21 1c
+     09 ff 21 15 15 ff 21 15 09 ff 21 15 15 ff 21 1c
+     11 ff 29 1d 1d ff 29 1d 11 ff 29 1d 1d ff 29 24
+     13 ff 2b 1f 1f ff 2b 1f 13 ff 2b 1f 1f ff 2b 26
+     09 ff 21 15 15 ff 21 15 09 ff 21 15 15 ff 21 1c
+     09 ff 21 15 15 ff 21 15 09 ff 21 15 15 ff 21 1c
+     11 ff 29 1d 1d ff 29 1d 11 ff 29 1d 1d ff 29 24
+     13 ff 2b 1f 1f ff 2b 1f 13 ff 2b 1f 1f ff 2b 26
+     09 ff 21 15 15 ff 21 15 09 ff 21 15 15 ff 21 1c
+   ARP0:
+     ff ff 2d ff ff ff 2d 39 ff ff 2d ff ff ff 2d 39
+     ff ff 35 ff ff ff 35 41 ff ff 35 ff ff ff 35 41
+     ff ff 37 ff ff ff 37 43 ff ff 37 ff ff ff 37 43
+     ff ff 2d ff ff ff 2d 39 ff ff 2d ff ff ff 2d 39
+     ff ff 2d ff ff ff 2d 39 ff ff 2d ff ff ff 2d 39
+     ff ff 35 ff ff ff 35 41 ff ff 35 ff ff ff 35 41
+     ff ff 37 ff ff ff 37 43 ff ff 37 ff ff ff 37 43
+     ff ff 2d ff ff ff 2d 39 ff ff 2d ff ff ff 2d 39
+     ff ff 2d ff ff ff 2d 39 ff ff 2d ff ff ff 2d 39
+     ff ff 35 ff ff ff 35 41 ff ff 35 ff ff ff 35 41
+     ff ff 37 ff ff ff 37 43 ff ff 37 ff ff ff 37 43
+     ff ff 2d ff ff ff 2d 39 ff ff 2d ff ff ff 2d 39
+     ff ff 2d ff ff ff 2d 39 ff ff 2d ff ff ff 2d 39
+     ff ff 35 ff ff ff 35 41 ff ff 35 ff ff ff 35 41
+     ff ff 37 ff ff ff 37 43 ff ff 37 ff ff ff 37 43
+     ff ff 2d ff ff ff 2d 39 ff ff 2d ff ff ff 2d 39
+   ARP1:
+     ff ff 30 ff ff ff 30 39 ff ff 30 ff ff ff 30 39
+     ff ff 39 ff ff ff 39 41 ff ff 39 ff ff ff 39 41
+     ff ff 3b ff ff ff 3b 43 ff ff 3b ff ff ff 3b 43
+     ff ff 30 ff ff ff 30 39 ff ff 30 ff ff ff 30 39
+     ff ff 30 ff ff ff 30 39 ff ff 30 ff ff ff 30 39
+     ff ff 39 ff ff ff 39 41 ff ff 39 ff ff ff 39 41
+     ff ff 3b ff ff ff 3b 43 ff ff 3b ff ff ff 3b 43
+     ff ff 30 ff ff ff 30 39 ff ff 30 ff ff ff 30 39
+     ff ff 30 ff ff ff 30 39 ff ff 30 ff ff ff 30 39
+     ff ff 39 ff ff ff 39 41 ff ff 39 ff ff ff 39 41
+     ff ff 3b ff ff ff 3b 43 ff ff 3b ff ff ff 3b 43
+     ff ff 30 ff ff ff 30 39 ff ff 30 ff ff ff 30 39
+     ff ff 30 ff ff ff 30 39 ff ff 30 ff ff ff 30 39
+     ff ff 39 ff ff ff 39 41 ff ff 39 ff ff ff 39 41
+     ff ff 3b ff ff ff 3b 43 ff ff 3b ff ff ff 3b 43
+     ff ff 30 ff ff ff 30 39 ff ff 30 ff ff ff 30 39
+   ARP2:
+     ff ff 34 ff ff ff 34 39 ff ff 34 ff ff ff 34 39
+     ff ff 3c ff ff ff 3c 41 ff ff 3c ff ff ff 3c 41
+     ff ff 3e ff ff ff 3e 43 ff ff 3e ff ff ff 3e 43
+     ff ff 34 ff ff ff 34 39 ff ff 34 ff ff ff 34 39
+     ff ff 34 ff ff ff 34 39 ff ff 34 ff ff ff 34 39
+     ff ff 3c ff ff ff 3c 41 ff ff 3c ff ff ff 3c 41
+     ff ff 3e ff ff ff 3e 43 ff ff 3e ff ff ff 3e 43
+     ff ff 34 ff ff ff 34 39 ff ff 34 ff ff ff 34 39
+     ff ff 34 ff ff ff 34 39 ff ff 34 ff ff ff 34 39
+     ff ff 3c ff ff ff 3c 41 ff ff 3c ff ff ff 3c 41
+     ff ff 3e ff ff ff 3e 43 ff ff 3e ff ff ff 3e 43
+     ff ff 34 ff ff ff 34 39 ff ff 34 ff ff ff 34 39
+     ff ff 34 ff ff ff 34 39 ff ff 34 ff ff ff 34 39
+     ff ff 3c ff ff ff 3c 41 ff ff 3c ff ff ff 3c 41
+     ff ff 3e ff ff ff 3e 43 ff ff 3e ff ff ff 3e 43
+     ff ff 34 ff ff ff 34 39 ff ff 34 ff ff ff 34 39
+   DRUM:
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+   FILT:
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+
+----------------------------------------------------------------------------
+SLOT 4   TECHNOA     "acid (ring-mod 303 line)"
+----------------------------------------------------------------------------
+  bass wave : SAW            arp wave : TRI++RING
+  speed     : 5 ticks/row    res15 route[V1+V2]   LP vol15
+  bass ADSR : atk0 dec6 / sus5 rel8
+  arp  ADSR : atk0 dec2 / sus7 rel8
+  pwm base/step : $05 / $04     filt LFO step : $07
+  filter cutoff range : $3c .. $5f
+
+  core loop (bars 0-3, 16 steps each):
+   bar0 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: A0 .. A1 .. A1 .. A1 .. A1 .. A1 .. A1 .. A1 ..
+        lead: A3 F5 A3 D4 A3 F5 F4 A3 A3 F5 D4 A3 A4 F4 D4 F5
+        drum: KK hh hh hh KK hh hh hh KK hh hh hh KK hh hh hh
+
+   bar1 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: A0 .. A1 .. A1 .. A1 .. A1 .. A1 .. A1 .. A1 ..
+        lead: A3 F5 A3 D4 A3 F5 F4 A3 A3 F5 D4 A3 A4 F4 D4 F5
+        drum: KK hh hh hh KK hh hh hh KK hh hh hh KK hh hh hh
+
+   bar2 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: D1 .. D2 .. D2 .. D2 .. D2 .. D2 .. D2 .. D2 ..
+        lead: D4 B5 D4 G4 D4 B5 B4 D4 D4 B5 G4 D4 D5 B4 G4 B5
+        drum: KK hh hh hh KK hh hh hh KK hh hh hh KK hh hh hh
+
+   bar3 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: D1 .. D2 .. D2 .. D2 .. D2 .. D2 .. D2 .. D2 ..
+        lead: D4 B5 D4 G4 D4 B5 B4 D4 D4 B5 G4 D4 D5 B4 G4 B5
+        drum: KK hh hh hh KK hh hh hh KK hh hh hh KK hh hh hh
+
+  full raw dump (hex, all 16 bars):
+   BASS:
+     09 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff
+     09 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff
+     0e ff 1a ff 1a ff 1a ff 1a ff 1a ff 1a ff 1a ff
+     0e ff 1a ff 1a ff 1a ff 1a ff 1a ff 1a ff 1a ff
+     09 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff
+     09 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff
+     0e ff 1a ff 1a ff 1a ff 1a ff 1a ff 1a ff 1a ff
+     0e ff 1a ff 1a ff 1a ff 1a ff 1a ff 1a ff 1a ff
+     09 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff
+     09 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff
+     0e ff 1a ff 1a ff 1a ff 1a ff 1a ff 1a ff 1a ff
+     0e ff 1a ff 1a ff 1a ff 1a ff 1a ff 1a ff 1a ff
+     09 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff
+     09 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff
+     0e ff 1a ff 1a ff 1a ff 1a ff 1a ff 1a ff 1a ff
+     0e ff 1a ff 1a ff 1a ff 1a ff 1a ff 1a ff 1a ff
+   ARP0:
+     2d 41 2d 32 2d 41 35 2d 2d 41 32 2d 39 35 32 41
+     2d 41 2d 32 2d 41 35 2d 2d 41 32 2d 39 35 32 41
+     32 47 32 37 32 47 3b 32 32 47 37 32 3e 3b 37 47
+     32 47 32 37 32 47 3b 32 32 47 37 32 3e 3b 37 47
+     2d 41 2d 32 2d 41 35 2d 2d 41 32 2d 39 35 32 41
+     2d 41 2d 32 2d 41 35 2d 2d 41 32 2d 39 35 32 41
+     32 47 32 37 32 47 3b 32 32 47 37 32 3e 3b 37 47
+     32 47 32 37 32 47 3b 32 32 47 37 32 3e 3b 37 47
+     2d 41 2d 32 2d 41 35 2d 2d 41 32 2d 39 35 32 41
+     2d 41 2d 32 2d 41 35 2d 2d 41 32 2d 39 35 32 41
+     32 47 32 37 32 47 3b 32 32 47 37 32 3e 3b 37 47
+     32 47 32 37 32 47 3b 32 32 47 37 32 3e 3b 37 47
+     2d 41 2d 32 2d 41 35 2d 2d 41 32 2d 39 35 32 41
+     2d 41 2d 32 2d 41 35 2d 2d 41 32 2d 39 35 32 41
+     32 47 32 37 32 47 3b 32 32 47 37 32 3e 3b 37 47
+     32 47 32 37 32 47 3b 32 32 47 37 32 3e 3b 37 47
+   ARP1:
+     2d 41 2d 32 2d 41 35 2d 2d 41 32 2d 39 35 32 41
+     2d 41 2d 32 2d 41 35 2d 2d 41 32 2d 39 35 32 41
+     32 47 32 37 32 47 3b 32 32 47 37 32 3e 3b 37 47
+     32 47 32 37 32 47 3b 32 32 47 37 32 3e 3b 37 47
+     2d 41 2d 32 2d 41 35 2d 2d 41 32 2d 39 35 32 41
+     2d 41 2d 32 2d 41 35 2d 2d 41 32 2d 39 35 32 41
+     32 47 32 37 32 47 3b 32 32 47 37 32 3e 3b 37 47
+     32 47 32 37 32 47 3b 32 32 47 37 32 3e 3b 37 47
+     2d 41 2d 32 2d 41 35 2d 2d 41 32 2d 39 35 32 41
+     2d 41 2d 32 2d 41 35 2d 2d 41 32 2d 39 35 32 41
+     32 47 32 37 32 47 3b 32 32 47 37 32 3e 3b 37 47
+     32 47 32 37 32 47 3b 32 32 47 37 32 3e 3b 37 47
+     2d 41 2d 32 2d 41 35 2d 2d 41 32 2d 39 35 32 41
+     2d 41 2d 32 2d 41 35 2d 2d 41 32 2d 39 35 32 41
+     32 47 32 37 32 47 3b 32 32 47 37 32 3e 3b 37 47
+     32 47 32 37 32 47 3b 32 32 47 37 32 3e 3b 37 47
+   ARP2:
+     2d 41 2d 32 2d 41 35 2d 2d 41 32 2d 39 35 32 41
+     2d 41 2d 32 2d 41 35 2d 2d 41 32 2d 39 35 32 41
+     32 47 32 37 32 47 3b 32 32 47 37 32 3e 3b 37 47
+     32 47 32 37 32 47 3b 32 32 47 37 32 3e 3b 37 47
+     2d 41 2d 32 2d 41 35 2d 2d 41 32 2d 39 35 32 41
+     2d 41 2d 32 2d 41 35 2d 2d 41 32 2d 39 35 32 41
+     32 47 32 37 32 47 3b 32 32 47 37 32 3e 3b 37 47
+     32 47 32 37 32 47 3b 32 32 47 37 32 3e 3b 37 47
+     2d 41 2d 32 2d 41 35 2d 2d 41 32 2d 39 35 32 41
+     2d 41 2d 32 2d 41 35 2d 2d 41 32 2d 39 35 32 41
+     32 47 32 37 32 47 3b 32 32 47 37 32 3e 3b 37 47
+     32 47 32 37 32 47 3b 32 32 47 37 32 3e 3b 37 47
+     2d 41 2d 32 2d 41 35 2d 2d 41 32 2d 39 35 32 41
+     2d 41 2d 32 2d 41 35 2d 2d 41 32 2d 39 35 32 41
+     32 47 32 37 32 47 3b 32 32 47 37 32 3e 3b 37 47
+     32 47 32 37 32 47 3b 32 32 47 37 32 3e 3b 37 47
+   DRUM:
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+   FILT:
+     3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c
+     44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44
+     4c 4c 4c 4c 4c 4c 4c 4c 4c 4c 4c 4c 4c 4c 4c 4c
+     54 54 54 54 54 54 54 54 54 54 54 54 54 54 54 54
+     5c 5c 5c 5c 5c 5c 5c 5c 5c 5c 5c 5c 5c 5c 5c 5c
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5c 5c 5c 5c 5c 5c 5c 5c 5c 5c 5c 5c 5c 5c 5c 5c
+     54 54 54 54 54 54 54 54 54 54 54 54 54 54 54 54
+     4c 4c 4c 4c 4c 4c 4c 4c 4c 4c 4c 4c 4c 4c 4c 4c
+     44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44
+
+----------------------------------------------------------------------------
+SLOT 5   TECHNOB     "hard-sync lead"
+----------------------------------------------------------------------------
+  bass wave : SAW            arp wave : TRI++SYNC
+  speed     : 5 ticks/row    res15 route[V1+V2]   LP+BP vol15
+  bass ADSR : atk0 dec5 / sus7 rel8
+  arp  ADSR : atk0 dec4 / sus10 rel8
+  pwm base/step : $04 / $06     filt LFO step : $08
+  filter cutoff range : $5e .. $5f
+
+  core loop (bars 0-3, 16 steps each):
+   bar0 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: A0 .. A1 .. A1 .. A2 A1 A0 .. A1 .. A1 .. A2 A1
+        lead: A3 .. .. A4 .. .. F4 .. D4 .. .. A4 .. .. D5 ..
+        drum: KK .. hh .. CL .. hh .. KK .. hh .. CL .. hh ..
+
+   bar1 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: G1 .. G2 .. G2 .. G3 G2 G1 .. G2 .. G2 .. G3 G2
+        lead: G4 .. .. G5 .. .. E5 .. C5 .. .. G5 .. .. C6 ..
+        drum: KK .. hh .. CL .. hh .. KK .. hh .. CL .. hh ..
+
+   bar2 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: F1 .. F2 .. F2 .. F3 F2 F1 .. F2 .. F2 .. F3 F2
+        lead: F4 .. .. F5 .. .. D5 .. B4 .. .. F5 .. .. B5 ..
+        drum: KK .. hh .. CL .. hh .. KK .. hh .. CL .. hh ..
+
+   bar3 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: G1 .. G2 .. G2 .. G3 G2 G1 .. G2 .. G2 .. G3 G2
+        lead: G4 .. .. G5 .. .. E5 .. C5 .. .. G5 .. .. C6 ..
+        drum: KK .. hh .. CL .. hh .. KK .. hh .. CL .. hh ..
+
+  full raw dump (hex, all 16 bars):
+   BASS:
+     09 ff 15 ff 15 ff 21 15 09 ff 15 ff 15 ff 21 15
+     13 ff 1f ff 1f ff 2b 1f 13 ff 1f ff 1f ff 2b 1f
+     11 ff 1d ff 1d ff 29 1d 11 ff 1d ff 1d ff 29 1d
+     13 ff 1f ff 1f ff 2b 1f 13 ff 1f ff 1f ff 2b 1f
+     09 ff 15 ff 15 ff 21 15 09 ff 15 ff 15 ff 21 15
+     13 ff 1f ff 1f ff 2b 1f 13 ff 1f ff 1f ff 2b 1f
+     11 ff 1d ff 1d ff 29 1d 11 ff 1d ff 1d ff 29 1d
+     13 ff 1f ff 1f ff 2b 1f 13 ff 1f ff 1f ff 2b 1f
+     09 ff 15 ff 15 ff 21 15 09 ff 15 ff 15 ff 21 15
+     13 ff 1f ff 1f ff 2b 1f 13 ff 1f ff 1f ff 2b 1f
+     11 ff 1d ff 1d ff 29 1d 11 ff 1d ff 1d ff 29 1d
+     13 ff 1f ff 1f ff 2b 1f 13 ff 1f ff 1f ff 2b 1f
+     09 ff 15 ff 15 ff 21 15 09 ff 15 ff 15 ff 21 15
+     13 ff 1f ff 1f ff 2b 1f 13 ff 1f ff 1f ff 2b 1f
+     11 ff 1d ff 1d ff 29 1d 11 ff 1d ff 1d ff 29 1d
+     13 ff 1f ff 1f ff 2b 1f 13 ff 1f ff 1f ff 2b 1f
+   ARP0:
+     2d ff ff 39 ff ff 35 ff 32 ff ff 39 ff ff 3e ff
+     37 ff ff 43 ff ff 40 ff 3c ff ff 43 ff ff 48 ff
+     35 ff ff 41 ff ff 3e ff 3b ff ff 41 ff ff 47 ff
+     37 ff ff 43 ff ff 40 ff 3c ff ff 43 ff ff 48 ff
+     2d ff ff 39 ff ff 35 ff 32 ff ff 39 ff ff 3e ff
+     37 ff ff 43 ff ff 40 ff 3c ff ff 43 ff ff 48 ff
+     35 ff ff 41 ff ff 3e ff 3b ff ff 41 ff ff 47 ff
+     37 ff ff 43 ff ff 40 ff 3c ff ff 43 ff ff 48 ff
+     2d ff ff 39 ff ff 35 ff 32 ff ff 39 ff ff 3e ff
+     37 ff ff 43 ff ff 40 ff 3c ff ff 43 ff ff 48 ff
+     35 ff ff 41 ff ff 3e ff 3b ff ff 41 ff ff 47 ff
+     37 ff ff 43 ff ff 40 ff 3c ff ff 43 ff ff 48 ff
+     2d ff ff 39 ff ff 35 ff 32 ff ff 39 ff ff 3e ff
+     37 ff ff 43 ff ff 40 ff 3c ff ff 43 ff ff 48 ff
+     35 ff ff 41 ff ff 3e ff 3b ff ff 41 ff ff 47 ff
+     37 ff ff 43 ff ff 40 ff 3c ff ff 43 ff ff 48 ff
+   ARP1:
+     2d ff ff 39 ff ff 35 ff 32 ff ff 39 ff ff 3e ff
+     37 ff ff 43 ff ff 40 ff 3c ff ff 43 ff ff 48 ff
+     35 ff ff 41 ff ff 3e ff 3b ff ff 41 ff ff 47 ff
+     37 ff ff 43 ff ff 40 ff 3c ff ff 43 ff ff 48 ff
+     2d ff ff 39 ff ff 35 ff 32 ff ff 39 ff ff 3e ff
+     37 ff ff 43 ff ff 40 ff 3c ff ff 43 ff ff 48 ff
+     35 ff ff 41 ff ff 3e ff 3b ff ff 41 ff ff 47 ff
+     37 ff ff 43 ff ff 40 ff 3c ff ff 43 ff ff 48 ff
+     2d ff ff 39 ff ff 35 ff 32 ff ff 39 ff ff 3e ff
+     37 ff ff 43 ff ff 40 ff 3c ff ff 43 ff ff 48 ff
+     35 ff ff 41 ff ff 3e ff 3b ff ff 41 ff ff 47 ff
+     37 ff ff 43 ff ff 40 ff 3c ff ff 43 ff ff 48 ff
+     2d ff ff 39 ff ff 35 ff 32 ff ff 39 ff ff 3e ff
+     37 ff ff 43 ff ff 40 ff 3c ff ff 43 ff ff 48 ff
+     35 ff ff 41 ff ff 3e ff 3b ff ff 41 ff ff 47 ff
+     37 ff ff 43 ff ff 40 ff 3c ff ff 43 ff ff 48 ff
+   ARP2:
+     2d ff ff 39 ff ff 35 ff 32 ff ff 39 ff ff 3e ff
+     37 ff ff 43 ff ff 40 ff 3c ff ff 43 ff ff 48 ff
+     35 ff ff 41 ff ff 3e ff 3b ff ff 41 ff ff 47 ff
+     37 ff ff 43 ff ff 40 ff 3c ff ff 43 ff ff 48 ff
+     2d ff ff 39 ff ff 35 ff 32 ff ff 39 ff ff 3e ff
+     37 ff ff 43 ff ff 40 ff 3c ff ff 43 ff ff 48 ff
+     35 ff ff 41 ff ff 3e ff 3b ff ff 41 ff ff 47 ff
+     37 ff ff 43 ff ff 40 ff 3c ff ff 43 ff ff 48 ff
+     2d ff ff 39 ff ff 35 ff 32 ff ff 39 ff ff 3e ff
+     37 ff ff 43 ff ff 40 ff 3c ff ff 43 ff ff 48 ff
+     35 ff ff 41 ff ff 3e ff 3b ff ff 41 ff ff 47 ff
+     37 ff ff 43 ff ff 40 ff 3c ff ff 43 ff ff 48 ff
+     2d ff ff 39 ff ff 35 ff 32 ff ff 39 ff ff 3e ff
+     37 ff ff 43 ff ff 40 ff 3c ff ff 43 ff ff 48 ff
+     35 ff ff 41 ff ff 3e ff 3b ff ff 41 ff ff 47 ff
+     37 ff ff 43 ff ff 40 ff 3c ff ff 43 ff ff 48 ff
+   DRUM:
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+   FILT:
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5e
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5e
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5e
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5e
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5e
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5e
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5e
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5e
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5e
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5e
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5e
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5e
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5e
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5e
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5e
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5e
+
+----------------------------------------------------------------------------
+SLOT 6   TECHNOC     "combined-wave rave"
+----------------------------------------------------------------------------
+  bass wave : SAW+PULSE      arp wave : SAW+PULSE
+  speed     : 5 ticks/row    res15 route[V1+V2+V3]   LP+HP vol15
+  bass ADSR : atk0 dec4 / sus8 rel8
+  arp  ADSR : atk0 dec2 / sus9 rel8
+  pwm base/step : $03 / $07     filt LFO step : $0a
+  filter cutoff range : $5f .. $5f
+
+  core loop (bars 0-3, 16 steps each):
+   bar0 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: A0 A1 A1 A2 A1 A1 .. A2 A1 A1 .. A2 A1 A1 A1 E2
+        lead: A4 .. .. A4 .. .. A4 .. A4 .. .. A4 .. .. A4 ..
+        drum: KK hh hh hh CL hh hh hh KK hh hh hh CL hh hh hh
+
+   bar1 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: F1 F2 F2 F3 F2 F2 .. F3 F2 F2 .. F3 F2 F2 F2 C3
+        lead: F5 .. .. F5 .. .. F5 .. F5 .. .. F5 .. .. F5 ..
+        drum: KK hh hh hh CL hh hh hh KK hh hh hh CL hh hh hh
+
+   bar2 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: C1 C2 C2 C3 C2 C2 .. C3 C2 C2 .. C3 C2 C2 C2 G2
+        lead: C5 .. .. C5 .. .. C5 .. C5 .. .. C5 .. .. C5 ..
+        drum: KK hh hh hh CL hh hh hh KK hh hh hh CL hh hh hh
+
+   bar3 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: G1 G2 G2 G3 G2 G2 .. G3 G2 G2 .. G3 G2 G2 G2 D3
+        lead: G5 .. .. G5 .. .. G5 .. G5 .. .. G5 .. .. G5 ..
+        drum: KK hh hh hh CL hh hh hh KK hh hh hh CL hh hh hh
+
+  full raw dump (hex, all 16 bars):
+   BASS:
+     09 15 15 21 15 15 ff 21 15 15 ff 21 15 15 15 1c
+     11 1d 1d 29 1d 1d ff 29 1d 1d ff 29 1d 1d 1d 24
+     0c 18 18 24 18 18 ff 24 18 18 ff 24 18 18 18 1f
+     13 1f 1f 2b 1f 1f ff 2b 1f 1f ff 2b 1f 1f 1f 26
+     09 15 15 21 15 15 ff 21 15 15 ff 21 15 15 15 1c
+     11 1d 1d 29 1d 1d ff 29 1d 1d ff 29 1d 1d 1d 24
+     0c 18 18 24 18 18 ff 24 18 18 ff 24 18 18 18 1f
+     13 1f 1f 2b 1f 1f ff 2b 1f 1f ff 2b 1f 1f 1f 26
+     09 15 15 21 15 15 ff 21 15 15 ff 21 15 15 15 1c
+     11 1d 1d 29 1d 1d ff 29 1d 1d ff 29 1d 1d 1d 24
+     0c 18 18 24 18 18 ff 24 18 18 ff 24 18 18 18 1f
+     13 1f 1f 2b 1f 1f ff 2b 1f 1f ff 2b 1f 1f 1f 26
+     09 15 15 21 15 15 ff 21 15 15 ff 21 15 15 15 1c
+     11 1d 1d 29 1d 1d ff 29 1d 1d ff 29 1d 1d 1d 24
+     0c 18 18 24 18 18 ff 24 18 18 ff 24 18 18 18 1f
+     13 1f 1f 2b 1f 1f ff 2b 1f 1f ff 2b 1f 1f 1f 26
+   ARP0:
+     39 ff ff 39 ff ff 39 ff 39 ff ff 39 ff ff 39 ff
+     41 ff ff 41 ff ff 41 ff 41 ff ff 41 ff ff 41 ff
+     3c ff ff 3c ff ff 3c ff 3c ff ff 3c ff ff 3c ff
+     43 ff ff 43 ff ff 43 ff 43 ff ff 43 ff ff 43 ff
+     39 ff ff 39 ff ff 39 ff 39 ff ff 39 ff ff 39 ff
+     41 ff ff 41 ff ff 41 ff 41 ff ff 41 ff ff 41 ff
+     3c ff ff 3c ff ff 3c ff 3c ff ff 3c ff ff 3c ff
+     43 ff ff 43 ff ff 43 ff 43 ff ff 43 ff ff 43 ff
+     39 ff ff 39 ff ff 39 ff 39 ff ff 39 ff ff 39 ff
+     41 ff ff 41 ff ff 41 ff 41 ff ff 41 ff ff 41 ff
+     3c ff ff 3c ff ff 3c ff 3c ff ff 3c ff ff 3c ff
+     43 ff ff 43 ff ff 43 ff 43 ff ff 43 ff ff 43 ff
+     39 ff ff 39 ff ff 39 ff 39 ff ff 39 ff ff 39 ff
+     41 ff ff 41 ff ff 41 ff 41 ff ff 41 ff ff 41 ff
+     3c ff ff 3c ff ff 3c ff 3c ff ff 3c ff ff 3c ff
+     43 ff ff 43 ff ff 43 ff 43 ff ff 43 ff ff 43 ff
+   ARP1:
+     3c ff ff 3c ff ff 3c ff 3c ff ff 3c ff ff 3c ff
+     45 ff ff 45 ff ff 45 ff 45 ff ff 45 ff ff 45 ff
+     40 ff ff 40 ff ff 40 ff 40 ff ff 40 ff ff 40 ff
+     47 ff ff 47 ff ff 47 ff 47 ff ff 47 ff ff 47 ff
+     3c ff ff 3c ff ff 3c ff 3c ff ff 3c ff ff 3c ff
+     45 ff ff 45 ff ff 45 ff 45 ff ff 45 ff ff 45 ff
+     40 ff ff 40 ff ff 40 ff 40 ff ff 40 ff ff 40 ff
+     47 ff ff 47 ff ff 47 ff 47 ff ff 47 ff ff 47 ff
+     3c ff ff 3c ff ff 3c ff 3c ff ff 3c ff ff 3c ff
+     45 ff ff 45 ff ff 45 ff 45 ff ff 45 ff ff 45 ff
+     40 ff ff 40 ff ff 40 ff 40 ff ff 40 ff ff 40 ff
+     47 ff ff 47 ff ff 47 ff 47 ff ff 47 ff ff 47 ff
+     3c ff ff 3c ff ff 3c ff 3c ff ff 3c ff ff 3c ff
+     45 ff ff 45 ff ff 45 ff 45 ff ff 45 ff ff 45 ff
+     40 ff ff 40 ff ff 40 ff 40 ff ff 40 ff ff 40 ff
+     47 ff ff 47 ff ff 47 ff 47 ff ff 47 ff ff 47 ff
+   ARP2:
+     40 ff ff 40 ff ff 40 ff 40 ff ff 40 ff ff 40 ff
+     48 ff ff 48 ff ff 48 ff 48 ff ff 48 ff ff 48 ff
+     43 ff ff 43 ff ff 43 ff 43 ff ff 43 ff ff 43 ff
+     4a ff ff 4a ff ff 4a ff 4a ff ff 4a ff ff 4a ff
+     40 ff ff 40 ff ff 40 ff 40 ff ff 40 ff ff 40 ff
+     48 ff ff 48 ff ff 48 ff 48 ff ff 48 ff ff 48 ff
+     43 ff ff 43 ff ff 43 ff 43 ff ff 43 ff ff 43 ff
+     4a ff ff 4a ff ff 4a ff 4a ff ff 4a ff ff 4a ff
+     40 ff ff 40 ff ff 40 ff 40 ff ff 40 ff ff 40 ff
+     48 ff ff 48 ff ff 48 ff 48 ff ff 48 ff ff 48 ff
+     43 ff ff 43 ff ff 43 ff 43 ff ff 43 ff ff 43 ff
+     4a ff ff 4a ff ff 4a ff 4a ff ff 4a ff ff 4a ff
+     40 ff ff 40 ff ff 40 ff 40 ff ff 40 ff ff 40 ff
+     48 ff ff 48 ff ff 48 ff 48 ff ff 48 ff ff 48 ff
+     43 ff ff 43 ff ff 43 ff 43 ff ff 43 ff ff 43 ff
+     4a ff ff 4a ff ff 4a ff 4a ff ff 4a ff ff 4a ff
+   DRUM:
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+   FILT:
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+
+----------------------------------------------------------------------------
+SLOT 7   DUBTEK      "dub techno (deep chord)"
+----------------------------------------------------------------------------
+  bass wave : SAW            arp wave : PULSE
+  speed     : 5 ticks/row    res10 route[V1]   LP vol15
+  bass ADSR : atk0 dec8 / sus10 rel8
+  arp  ADSR : atk0 dec0 / sus15 rel10
+  pwm base/step : $06 / $01     filt LFO step : $02
+  filter cutoff range : $38 .. $46
+
+  core loop (bars 0-3, 16 steps each):
+   bar0 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: A0 .. .. .. .. .. A1 .. A0 .. .. .. .. .. A1 ..
+        lead: .. .. .. .. .. .. A3 .. .. .. .. .. .. .. A3 ..
+        drum: KK .. hh .. KK .. hh .. KK .. hh .. KK .. hh ..
+
+   bar1 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: A0 .. .. .. .. .. A1 .. A0 .. .. .. .. .. A1 ..
+        lead: .. .. .. .. .. .. A3 .. .. .. .. .. .. .. A3 ..
+        drum: KK .. hh .. KK .. hh .. KK .. hh .. KK .. hh ..
+
+   bar2 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: A0 .. .. .. .. .. A1 .. A0 .. .. .. .. .. A1 ..
+        lead: .. .. .. .. .. .. A3 .. .. .. .. .. .. .. A3 ..
+        drum: KK .. hh .. KK .. hh .. KK .. hh .. KK .. hh ..
+
+   bar3 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: F1 .. .. .. .. .. F2 .. F1 .. .. .. .. .. F2 ..
+        lead: .. .. .. .. .. .. F4 .. .. .. .. .. .. .. F4 ..
+        drum: KK .. hh .. KK .. hh .. KK .. hh .. KK .. hh ..
+
+  full raw dump (hex, all 16 bars):
+   BASS:
+     09 ff ff ff ff ff 15 ff 09 ff ff ff ff ff 15 ff
+     09 ff ff ff ff ff 15 ff 09 ff ff ff ff ff 15 ff
+     09 ff ff ff ff ff 15 ff 09 ff ff ff ff ff 15 ff
+     11 ff ff ff ff ff 1d ff 11 ff ff ff ff ff 1d ff
+     09 ff ff ff ff ff 15 ff 09 ff ff ff ff ff 15 ff
+     09 ff ff ff ff ff 15 ff 09 ff ff ff ff ff 15 ff
+     09 ff ff ff ff ff 15 ff 09 ff ff ff ff ff 15 ff
+     11 ff ff ff ff ff 1d ff 11 ff ff ff ff ff 1d ff
+     09 ff ff ff ff ff 15 ff 09 ff ff ff ff ff 15 ff
+     09 ff ff ff ff ff 15 ff 09 ff ff ff ff ff 15 ff
+     09 ff ff ff ff ff 15 ff 09 ff ff ff ff ff 15 ff
+     11 ff ff ff ff ff 1d ff 11 ff ff ff ff ff 1d ff
+     09 ff ff ff ff ff 15 ff 09 ff ff ff ff ff 15 ff
+     09 ff ff ff ff ff 15 ff 09 ff ff ff ff ff 15 ff
+     09 ff ff ff ff ff 15 ff 09 ff ff ff ff ff 15 ff
+     11 ff ff ff ff ff 1d ff 11 ff ff ff ff ff 1d ff
+   ARP0:
+     ff ff ff ff ff ff 2d ff ff ff ff ff ff ff 2d ff
+     ff ff ff ff ff ff 2d ff ff ff ff ff ff ff 2d ff
+     ff ff ff ff ff ff 2d ff ff ff ff ff ff ff 2d ff
+     ff ff ff ff ff ff 35 ff ff ff ff ff ff ff 35 ff
+     ff ff ff ff ff ff 2d ff ff ff ff ff ff ff 2d ff
+     ff ff ff ff ff ff 2d ff ff ff ff ff ff ff 2d ff
+     ff ff ff ff ff ff 2d ff ff ff ff ff ff ff 2d ff
+     ff ff ff ff ff ff 35 ff ff ff ff ff ff ff 35 ff
+     ff ff ff ff ff ff 2d ff ff ff ff ff ff ff 2d ff
+     ff ff ff ff ff ff 2d ff ff ff ff ff ff ff 2d ff
+     ff ff ff ff ff ff 2d ff ff ff ff ff ff ff 2d ff
+     ff ff ff ff ff ff 35 ff ff ff ff ff ff ff 35 ff
+     ff ff ff ff ff ff 2d ff ff ff ff ff ff ff 2d ff
+     ff ff ff ff ff ff 2d ff ff ff ff ff ff ff 2d ff
+     ff ff ff ff ff ff 2d ff ff ff ff ff ff ff 2d ff
+     ff ff ff ff ff ff 35 ff ff ff ff ff ff ff 35 ff
+   ARP1:
+     ff ff ff ff ff ff 30 ff ff ff ff ff ff ff 30 ff
+     ff ff ff ff ff ff 30 ff ff ff ff ff ff ff 30 ff
+     ff ff ff ff ff ff 30 ff ff ff ff ff ff ff 30 ff
+     ff ff ff ff ff ff 39 ff ff ff ff ff ff ff 39 ff
+     ff ff ff ff ff ff 30 ff ff ff ff ff ff ff 30 ff
+     ff ff ff ff ff ff 30 ff ff ff ff ff ff ff 30 ff
+     ff ff ff ff ff ff 30 ff ff ff ff ff ff ff 30 ff
+     ff ff ff ff ff ff 39 ff ff ff ff ff ff ff 39 ff
+     ff ff ff ff ff ff 30 ff ff ff ff ff ff ff 30 ff
+     ff ff ff ff ff ff 30 ff ff ff ff ff ff ff 30 ff
+     ff ff ff ff ff ff 30 ff ff ff ff ff ff ff 30 ff
+     ff ff ff ff ff ff 39 ff ff ff ff ff ff ff 39 ff
+     ff ff ff ff ff ff 30 ff ff ff ff ff ff ff 30 ff
+     ff ff ff ff ff ff 30 ff ff ff ff ff ff ff 30 ff
+     ff ff ff ff ff ff 30 ff ff ff ff ff ff ff 30 ff
+     ff ff ff ff ff ff 39 ff ff ff ff ff ff ff 39 ff
+   ARP2:
+     ff ff ff ff ff ff 34 ff ff ff ff ff ff ff 34 ff
+     ff ff ff ff ff ff 34 ff ff ff ff ff ff ff 34 ff
+     ff ff ff ff ff ff 34 ff ff ff ff ff ff ff 34 ff
+     ff ff ff ff ff ff 3c ff ff ff ff ff ff ff 3c ff
+     ff ff ff ff ff ff 34 ff ff ff ff ff ff ff 34 ff
+     ff ff ff ff ff ff 34 ff ff ff ff ff ff ff 34 ff
+     ff ff ff ff ff ff 34 ff ff ff ff ff ff ff 34 ff
+     ff ff ff ff ff ff 3c ff ff ff ff ff ff ff 3c ff
+     ff ff ff ff ff ff 34 ff ff ff ff ff ff ff 34 ff
+     ff ff ff ff ff ff 34 ff ff ff ff ff ff ff 34 ff
+     ff ff ff ff ff ff 34 ff ff ff ff ff ff ff 34 ff
+     ff ff ff ff ff ff 3c ff ff ff ff ff ff ff 3c ff
+     ff ff ff ff ff ff 34 ff ff ff ff ff ff ff 34 ff
+     ff ff ff ff ff ff 34 ff ff ff ff ff ff ff 34 ff
+     ff ff ff ff ff ff 34 ff ff ff ff ff ff ff 34 ff
+     ff ff ff ff ff ff 3c ff ff ff ff ff ff ff 3c ff
+   DRUM:
+     01 00 02 00 01 00 02 00 01 00 02 00 01 00 02 00
+     01 00 02 00 01 00 02 00 01 00 02 00 01 00 02 00
+     01 00 02 00 01 00 02 00 01 00 02 00 01 00 02 00
+     01 00 02 00 01 00 02 00 01 00 02 00 01 00 02 00
+     01 00 02 00 01 00 02 00 01 00 02 00 01 00 02 00
+     01 00 02 00 01 00 02 00 01 00 02 00 01 00 02 00
+     01 00 02 00 01 00 02 00 01 00 02 00 01 00 02 00
+     01 00 02 00 01 00 02 00 01 00 02 00 01 00 02 00
+     01 00 02 00 01 00 02 00 01 00 02 00 01 00 02 00
+     01 00 02 00 01 00 02 00 01 00 02 00 01 00 02 00
+     01 00 02 00 01 00 02 00 01 00 02 00 01 00 02 00
+     01 00 02 00 01 00 02 00 01 00 02 00 01 00 02 00
+     01 00 02 00 01 00 02 00 01 00 02 00 01 00 02 00
+     01 00 02 00 01 00 02 00 01 00 02 00 01 00 02 00
+     01 00 02 00 01 00 02 00 01 00 02 00 01 00 02 00
+     01 00 02 00 01 00 02 00 01 00 02 00 01 00 02 00
+   FILT:
+     38 38 38 38 38 38 38 38 38 38 38 38 38 38 38 38
+     3a 3a 3a 3a 3a 3a 3a 3a 3a 3a 3a 3a 3a 3a 3a 3a
+     3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c
+     3e 3e 3e 3e 3e 3e 3e 3e 3e 3e 3e 3e 3e 3e 3e 3e
+     40 40 40 40 40 40 40 40 40 40 40 40 40 40 40 40
+     42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42
+     44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44
+     46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46
+     38 38 38 38 38 38 38 38 38 38 38 38 38 38 38 38
+     3a 3a 3a 3a 3a 3a 3a 3a 3a 3a 3a 3a 3a 3a 3a 3a
+     3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c
+     3e 3e 3e 3e 3e 3e 3e 3e 3e 3e 3e 3e 3e 3e 3e 3e
+     40 40 40 40 40 40 40 40 40 40 40 40 40 40 40 40
+     42 42 42 42 42 42 42 42 42 42 42 42 42 42 42 42
+     44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44
+     46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46
+
+----------------------------------------------------------------------------
+SLOT 8   ACIDROLL    "acid roller (2nd 303)"
+----------------------------------------------------------------------------
+  bass wave : SAW            arp wave : TRI++RING
+  speed     : 5 ticks/row    res15 route[V1+V2]   LP vol15
+  bass ADSR : atk0 dec6 / sus6 rel8
+  arp  ADSR : atk0 dec2 / sus6 rel8
+  pwm base/step : $04 / $05     filt LFO step : $08
+  filter cutoff range : $2c .. $5f
+
+  core loop (bars 0-3, 16 steps each):
+   bar0 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: A0 .. A1 A2 A1 .. A1 A2 A1 .. A1 A2 A1 .. A1 A2
+        lead: A3 A4 A3 A3 F4 A3 A4 F5 A3 D4 A3 A4 F4 A3 F5 A4
+        drum: KK hh hh hh KK hh hh hh KK hh hh hh KK hh hh hh
+
+   bar1 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: A0 .. A1 A2 A1 .. A1 A2 A1 .. A1 A2 A1 .. A1 A2
+        lead: A3 A4 A3 A3 F4 A3 A4 F5 A3 D4 A3 A4 F4 A3 F5 A4
+        drum: KK hh hh hh KK hh hh hh KK hh hh hh KK hh hh hh
+
+   bar2 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: D1 .. D2 D3 D2 .. D2 D3 D2 .. D2 D3 D2 .. D2 D3
+        lead: D4 D5 D4 D4 B4 D4 D5 B5 D4 G4 D4 D5 B4 D4 B5 D5
+        drum: KK hh hh hh KK hh hh hh KK hh hh hh KK hh hh hh
+
+   bar3 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: D1 .. D2 D3 D2 .. D2 D3 D2 .. D2 D3 D2 .. D2 D3
+        lead: D4 D5 D4 D4 B4 D4 D5 B5 D4 G4 D4 D5 B4 D4 B5 D5
+        drum: KK hh hh hh KK hh hh hh KK hh hh hh KK hh hh hh
+
+  full raw dump (hex, all 16 bars):
+   BASS:
+     09 ff 15 21 15 ff 15 21 15 ff 15 21 15 ff 15 21
+     09 ff 15 21 15 ff 15 21 15 ff 15 21 15 ff 15 21
+     0e ff 1a 26 1a ff 1a 26 1a ff 1a 26 1a ff 1a 26
+     0e ff 1a 26 1a ff 1a 26 1a ff 1a 26 1a ff 1a 26
+     09 ff 15 21 15 ff 15 21 15 ff 15 21 15 ff 15 21
+     09 ff 15 21 15 ff 15 21 15 ff 15 21 15 ff 15 21
+     0e ff 1a 26 1a ff 1a 26 1a ff 1a 26 1a ff 1a 26
+     0e ff 1a 26 1a ff 1a 26 1a ff 1a 26 1a ff 1a 26
+     09 ff 15 21 15 ff 15 21 15 ff 15 21 15 ff 15 21
+     09 ff 15 21 15 ff 15 21 15 ff 15 21 15 ff 15 21
+     0e ff 1a 26 1a ff 1a 26 1a ff 1a 26 1a ff 1a 26
+     0e ff 1a 26 1a ff 1a 26 1a ff 1a 26 1a ff 1a 26
+     09 ff 15 21 15 ff 15 21 15 ff 15 21 15 ff 15 21
+     09 ff 15 21 15 ff 15 21 15 ff 15 21 15 ff 15 21
+     0e ff 1a 26 1a ff 1a 26 1a ff 1a 26 1a ff 1a 26
+     0e ff 1a 26 1a ff 1a 26 1a ff 1a 26 1a ff 1a 26
+   ARP0:
+     2d 39 2d 2d 35 2d 39 41 2d 32 2d 39 35 2d 41 39
+     2d 39 2d 2d 35 2d 39 41 2d 32 2d 39 35 2d 41 39
+     32 3e 32 32 3b 32 3e 47 32 37 32 3e 3b 32 47 3e
+     32 3e 32 32 3b 32 3e 47 32 37 32 3e 3b 32 47 3e
+     2d 39 2d 2d 35 2d 39 41 2d 32 2d 39 35 2d 41 39
+     2d 39 2d 2d 35 2d 39 41 2d 32 2d 39 35 2d 41 39
+     32 3e 32 32 3b 32 3e 47 32 37 32 3e 3b 32 47 3e
+     32 3e 32 32 3b 32 3e 47 32 37 32 3e 3b 32 47 3e
+     2d 39 2d 2d 35 2d 39 41 2d 32 2d 39 35 2d 41 39
+     2d 39 2d 2d 35 2d 39 41 2d 32 2d 39 35 2d 41 39
+     32 3e 32 32 3b 32 3e 47 32 37 32 3e 3b 32 47 3e
+     32 3e 32 32 3b 32 3e 47 32 37 32 3e 3b 32 47 3e
+     2d 39 2d 2d 35 2d 39 41 2d 32 2d 39 35 2d 41 39
+     2d 39 2d 2d 35 2d 39 41 2d 32 2d 39 35 2d 41 39
+     32 3e 32 32 3b 32 3e 47 32 37 32 3e 3b 32 47 3e
+     32 3e 32 32 3b 32 3e 47 32 37 32 3e 3b 32 47 3e
+   ARP1:
+     2d 39 2d 2d 35 2d 39 41 2d 32 2d 39 35 2d 41 39
+     2d 39 2d 2d 35 2d 39 41 2d 32 2d 39 35 2d 41 39
+     32 3e 32 32 3b 32 3e 47 32 37 32 3e 3b 32 47 3e
+     32 3e 32 32 3b 32 3e 47 32 37 32 3e 3b 32 47 3e
+     2d 39 2d 2d 35 2d 39 41 2d 32 2d 39 35 2d 41 39
+     2d 39 2d 2d 35 2d 39 41 2d 32 2d 39 35 2d 41 39
+     32 3e 32 32 3b 32 3e 47 32 37 32 3e 3b 32 47 3e
+     32 3e 32 32 3b 32 3e 47 32 37 32 3e 3b 32 47 3e
+     2d 39 2d 2d 35 2d 39 41 2d 32 2d 39 35 2d 41 39
+     2d 39 2d 2d 35 2d 39 41 2d 32 2d 39 35 2d 41 39
+     32 3e 32 32 3b 32 3e 47 32 37 32 3e 3b 32 47 3e
+     32 3e 32 32 3b 32 3e 47 32 37 32 3e 3b 32 47 3e
+     2d 39 2d 2d 35 2d 39 41 2d 32 2d 39 35 2d 41 39
+     2d 39 2d 2d 35 2d 39 41 2d 32 2d 39 35 2d 41 39
+     32 3e 32 32 3b 32 3e 47 32 37 32 3e 3b 32 47 3e
+     32 3e 32 32 3b 32 3e 47 32 37 32 3e 3b 32 47 3e
+   ARP2:
+     2d 39 2d 2d 35 2d 39 41 2d 32 2d 39 35 2d 41 39
+     2d 39 2d 2d 35 2d 39 41 2d 32 2d 39 35 2d 41 39
+     32 3e 32 32 3b 32 3e 47 32 37 32 3e 3b 32 47 3e
+     32 3e 32 32 3b 32 3e 47 32 37 32 3e 3b 32 47 3e
+     2d 39 2d 2d 35 2d 39 41 2d 32 2d 39 35 2d 41 39
+     2d 39 2d 2d 35 2d 39 41 2d 32 2d 39 35 2d 41 39
+     32 3e 32 32 3b 32 3e 47 32 37 32 3e 3b 32 47 3e
+     32 3e 32 32 3b 32 3e 47 32 37 32 3e 3b 32 47 3e
+     2d 39 2d 2d 35 2d 39 41 2d 32 2d 39 35 2d 41 39
+     2d 39 2d 2d 35 2d 39 41 2d 32 2d 39 35 2d 41 39
+     32 3e 32 32 3b 32 3e 47 32 37 32 3e 3b 32 47 3e
+     32 3e 32 32 3b 32 3e 47 32 37 32 3e 3b 32 47 3e
+     2d 39 2d 2d 35 2d 39 41 2d 32 2d 39 35 2d 41 39
+     2d 39 2d 2d 35 2d 39 41 2d 32 2d 39 35 2d 41 39
+     32 3e 32 32 3b 32 3e 47 32 37 32 3e 3b 32 47 3e
+     32 3e 32 32 3b 32 3e 47 32 37 32 3e 3b 32 47 3e
+   DRUM:
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+   FILT:
+     2c 2c 2c 2c 2c 2c 2c 2c 2c 2c 2c 2c 2c 2c 2c 2c
+     34 34 34 34 34 34 34 34 34 34 34 34 34 34 34 34
+     3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c
+     44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44
+     4c 4c 4c 4c 4c 4c 4c 4c 4c 4c 4c 4c 4c 4c 4c 4c
+     54 54 54 54 54 54 54 54 54 54 54 54 54 54 54 54
+     5c 5c 5c 5c 5c 5c 5c 5c 5c 5c 5c 5c 5c 5c 5c 5c
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5c 5c 5c 5c 5c 5c 5c 5c 5c 5c 5c 5c 5c 5c 5c 5c
+     54 54 54 54 54 54 54 54 54 54 54 54 54 54 54 54
+     4c 4c 4c 4c 4c 4c 4c 4c 4c 4c 4c 4c 4c 4c 4c 4c
+     44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44
+     3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c
+     34 34 34 34 34 34 34 34 34 34 34 34 34 34 34 34
+
+----------------------------------------------------------------------------
+SLOT 9   DETROIT     "detroit melodic strings"
+----------------------------------------------------------------------------
+  bass wave : SAW            arp wave : SAW+PULSE
+  speed     : 5 ticks/row    res5 route[V1+V2]   LP vol15
+  bass ADSR : atk0 dec8 / sus8 rel8
+  arp  ADSR : atk0 dec6 / sus10 rel9
+  pwm base/step : $05 / $03     filt LFO step : $05
+  filter cutoff range : $5f .. $5f
+
+  core loop (bars 0-3, 16 steps each):
+   bar0 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: A0 .. .. .. A1 .. A2 .. A0 .. .. .. A1 .. A2 ..
+        lead: A3 .. C4 .. E4 .. .. C4 E4 .. .. A4 F4 .. E4 ..
+        drum: KK .. hh .. CL .. hh .. KK .. hh .. CL .. hh ..
+
+   bar1 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: F1 .. .. .. F2 .. F3 .. F1 .. .. .. F2 .. F3 ..
+        lead: F4 .. A4 .. C5 .. .. A4 C5 .. .. F5 D5 .. C5 ..
+        drum: KK .. hh .. CL .. hh .. KK .. hh .. CL .. hh ..
+
+   bar2 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: C1 .. .. .. C2 .. C3 .. C1 .. .. .. C2 .. C3 ..
+        lead: C4 .. E4 .. G4 .. .. E4 G4 .. .. C5 A4 .. G4 ..
+        drum: KK .. hh .. CL .. hh .. KK .. hh .. CL .. hh ..
+
+   bar3 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: G1 .. .. .. G2 .. G3 .. G1 .. .. .. G2 .. G3 ..
+        lead: G4 .. B4 .. D5 .. .. B4 D5 .. .. G5 E5 .. D5 ..
+        drum: KK .. hh .. CL .. hh .. KK .. hh .. CL .. hh ..
+
+  full raw dump (hex, all 16 bars):
+   BASS:
+     09 ff ff ff 15 ff 21 ff 09 ff ff ff 15 ff 21 ff
+     11 ff ff ff 1d ff 29 ff 11 ff ff ff 1d ff 29 ff
+     0c ff ff ff 18 ff 24 ff 0c ff ff ff 18 ff 24 ff
+     13 ff ff ff 1f ff 2b ff 13 ff ff ff 1f ff 2b ff
+     09 ff ff ff 15 ff 21 ff 09 ff ff ff 15 ff 21 ff
+     11 ff ff ff 1d ff 29 ff 11 ff ff ff 1d ff 29 ff
+     0c ff ff ff 18 ff 24 ff 0c ff ff ff 18 ff 24 ff
+     13 ff ff ff 1f ff 2b ff 13 ff ff ff 1f ff 2b ff
+     09 ff ff ff 15 ff 21 ff 09 ff ff ff 15 ff 21 ff
+     11 ff ff ff 1d ff 29 ff 11 ff ff ff 1d ff 29 ff
+     0c ff ff ff 18 ff 24 ff 0c ff ff ff 18 ff 24 ff
+     13 ff ff ff 1f ff 2b ff 13 ff ff ff 1f ff 2b ff
+     09 ff ff ff 15 ff 21 ff 09 ff ff ff 15 ff 21 ff
+     11 ff ff ff 1d ff 29 ff 11 ff ff ff 1d ff 29 ff
+     0c ff ff ff 18 ff 24 ff 0c ff ff ff 18 ff 24 ff
+     13 ff ff ff 1f ff 2b ff 13 ff ff ff 1f ff 2b ff
+   ARP0:
+     2d ff 30 ff 34 ff ff 30 34 ff ff 39 35 ff 34 ff
+     35 ff 39 ff 3c ff ff 39 3c ff ff 41 3e ff 3c ff
+     30 ff 34 ff 37 ff ff 34 37 ff ff 3c 39 ff 37 ff
+     37 ff 3b ff 3e ff ff 3b 3e ff ff 43 40 ff 3e ff
+     2d ff 30 ff 34 ff ff 30 34 ff ff 39 35 ff 34 ff
+     35 ff 39 ff 3c ff ff 39 3c ff ff 41 3e ff 3c ff
+     30 ff 34 ff 37 ff ff 34 37 ff ff 3c 39 ff 37 ff
+     37 ff 3b ff 3e ff ff 3b 3e ff ff 43 40 ff 3e ff
+     2d ff 30 ff 34 ff ff 30 34 ff ff 39 35 ff 34 ff
+     35 ff 39 ff 3c ff ff 39 3c ff ff 41 3e ff 3c ff
+     30 ff 34 ff 37 ff ff 34 37 ff ff 3c 39 ff 37 ff
+     37 ff 3b ff 3e ff ff 3b 3e ff ff 43 40 ff 3e ff
+     2d ff 30 ff 34 ff ff 30 34 ff ff 39 35 ff 34 ff
+     35 ff 39 ff 3c ff ff 39 3c ff ff 41 3e ff 3c ff
+     30 ff 34 ff 37 ff ff 34 37 ff ff 3c 39 ff 37 ff
+     37 ff 3b ff 3e ff ff 3b 3e ff ff 43 40 ff 3e ff
+   ARP1:
+     2d ff 30 ff 34 ff ff 30 34 ff ff 39 35 ff 34 ff
+     35 ff 39 ff 3c ff ff 39 3c ff ff 41 3e ff 3c ff
+     30 ff 34 ff 37 ff ff 34 37 ff ff 3c 39 ff 37 ff
+     37 ff 3b ff 3e ff ff 3b 3e ff ff 43 40 ff 3e ff
+     2d ff 30 ff 34 ff ff 30 34 ff ff 39 35 ff 34 ff
+     35 ff 39 ff 3c ff ff 39 3c ff ff 41 3e ff 3c ff
+     30 ff 34 ff 37 ff ff 34 37 ff ff 3c 39 ff 37 ff
+     37 ff 3b ff 3e ff ff 3b 3e ff ff 43 40 ff 3e ff
+     2d ff 30 ff 34 ff ff 30 34 ff ff 39 35 ff 34 ff
+     35 ff 39 ff 3c ff ff 39 3c ff ff 41 3e ff 3c ff
+     30 ff 34 ff 37 ff ff 34 37 ff ff 3c 39 ff 37 ff
+     37 ff 3b ff 3e ff ff 3b 3e ff ff 43 40 ff 3e ff
+     2d ff 30 ff 34 ff ff 30 34 ff ff 39 35 ff 34 ff
+     35 ff 39 ff 3c ff ff 39 3c ff ff 41 3e ff 3c ff
+     30 ff 34 ff 37 ff ff 34 37 ff ff 3c 39 ff 37 ff
+     37 ff 3b ff 3e ff ff 3b 3e ff ff 43 40 ff 3e ff
+   ARP2:
+     2d ff 30 ff 34 ff ff 30 34 ff ff 39 35 ff 34 ff
+     35 ff 39 ff 3c ff ff 39 3c ff ff 41 3e ff 3c ff
+     30 ff 34 ff 37 ff ff 34 37 ff ff 3c 39 ff 37 ff
+     37 ff 3b ff 3e ff ff 3b 3e ff ff 43 40 ff 3e ff
+     2d ff 30 ff 34 ff ff 30 34 ff ff 39 35 ff 34 ff
+     35 ff 39 ff 3c ff ff 39 3c ff ff 41 3e ff 3c ff
+     30 ff 34 ff 37 ff ff 34 37 ff ff 3c 39 ff 37 ff
+     37 ff 3b ff 3e ff ff 3b 3e ff ff 43 40 ff 3e ff
+     2d ff 30 ff 34 ff ff 30 34 ff ff 39 35 ff 34 ff
+     35 ff 39 ff 3c ff ff 39 3c ff ff 41 3e ff 3c ff
+     30 ff 34 ff 37 ff ff 34 37 ff ff 3c 39 ff 37 ff
+     37 ff 3b ff 3e ff ff 3b 3e ff ff 43 40 ff 3e ff
+     2d ff 30 ff 34 ff ff 30 34 ff ff 39 35 ff 34 ff
+     35 ff 39 ff 3c ff ff 39 3c ff ff 41 3e ff 3c ff
+     30 ff 34 ff 37 ff ff 34 37 ff ff 3c 39 ff 37 ff
+     37 ff 3b ff 3e ff ff 3b 3e ff ff 43 40 ff 3e ff
+   DRUM:
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+   FILT:
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+
+----------------------------------------------------------------------------
+SLOT 10  RAVEPEAK    "euphoric fast arp"
+----------------------------------------------------------------------------
+  bass wave : SAW+PULSE      arp wave : PULSE
+  speed     : 5 ticks/row    res15 route[V1+V2]   LP vol15
+  bass ADSR : atk0 dec5 / sus8 rel8
+  arp  ADSR : atk0 dec2 / sus9 rel8
+  pwm base/step : $03 / $07     filt LFO step : $0a
+  filter cutoff range : $5f .. $5f
+
+  core loop (bars 0-3, 16 steps each):
+   bar0 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: A0 A1 A1 A2 A1 A1 .. A2 A1 A1 .. A2 A1 A1 A1 A2
+        lead: A4 A4 A4 A4 A4 A4 A4 A4 A4 A4 A4 A4 A4 A4 A4 A4
+        drum: KK hh hh hh CL hh hh hh KK hh hh hh CL hh hh hh
+
+   bar1 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: F1 F2 F2 F3 F2 F2 .. F3 F2 F2 .. F3 F2 F2 F2 F3
+        lead: F5 F5 F5 F5 F5 F5 F5 F5 F5 F5 F5 F5 F5 F5 F5 F5
+        drum: KK hh hh hh CL hh hh hh KK hh hh hh CL hh hh hh
+
+   bar2 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: G1 G2 G2 G3 G2 G2 .. G3 G2 G2 .. G3 G2 G2 G2 G3
+        lead: G5 G5 G5 G5 G5 G5 G5 G5 G5 G5 G5 G5 G5 G5 G5 G5
+        drum: KK hh hh hh CL hh hh hh KK hh hh hh CL hh hh hh
+
+   bar3 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: A0 A1 A1 A2 A1 A1 .. A2 A1 A1 .. A2 A1 A1 A1 A2
+        lead: A4 A4 A4 A4 A4 A4 A4 A4 A4 A4 A4 A4 A4 A4 A4 A4
+        drum: KK hh hh hh CL hh hh hh KK hh hh hh CL hh hh hh
+
+  full raw dump (hex, all 16 bars):
+   BASS:
+     09 15 15 21 15 15 ff 21 15 15 ff 21 15 15 15 21
+     11 1d 1d 29 1d 1d ff 29 1d 1d ff 29 1d 1d 1d 29
+     13 1f 1f 2b 1f 1f ff 2b 1f 1f ff 2b 1f 1f 1f 2b
+     09 15 15 21 15 15 ff 21 15 15 ff 21 15 15 15 21
+     09 15 15 21 15 15 ff 21 15 15 ff 21 15 15 15 21
+     11 1d 1d 29 1d 1d ff 29 1d 1d ff 29 1d 1d 1d 29
+     13 1f 1f 2b 1f 1f ff 2b 1f 1f ff 2b 1f 1f 1f 2b
+     09 15 15 21 15 15 ff 21 15 15 ff 21 15 15 15 21
+     09 15 15 21 15 15 ff 21 15 15 ff 21 15 15 15 21
+     11 1d 1d 29 1d 1d ff 29 1d 1d ff 29 1d 1d 1d 29
+     13 1f 1f 2b 1f 1f ff 2b 1f 1f ff 2b 1f 1f 1f 2b
+     09 15 15 21 15 15 ff 21 15 15 ff 21 15 15 15 21
+     09 15 15 21 15 15 ff 21 15 15 ff 21 15 15 15 21
+     11 1d 1d 29 1d 1d ff 29 1d 1d ff 29 1d 1d 1d 29
+     13 1f 1f 2b 1f 1f ff 2b 1f 1f ff 2b 1f 1f 1f 2b
+     09 15 15 21 15 15 ff 21 15 15 ff 21 15 15 15 21
+   ARP0:
+     39 39 39 39 39 39 39 39 39 39 39 39 39 39 39 39
+     41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41
+     43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43
+     39 39 39 39 39 39 39 39 39 39 39 39 39 39 39 39
+     39 39 39 39 39 39 39 39 39 39 39 39 39 39 39 39
+     41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41
+     43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43
+     39 39 39 39 39 39 39 39 39 39 39 39 39 39 39 39
+     39 39 39 39 39 39 39 39 39 39 39 39 39 39 39 39
+     41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41
+     43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43
+     39 39 39 39 39 39 39 39 39 39 39 39 39 39 39 39
+     39 39 39 39 39 39 39 39 39 39 39 39 39 39 39 39
+     41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41
+     43 43 43 43 43 43 43 43 43 43 43 43 43 43 43 43
+     39 39 39 39 39 39 39 39 39 39 39 39 39 39 39 39
+   ARP1:
+     3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c
+     45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45
+     47 47 47 47 47 47 47 47 47 47 47 47 47 47 47 47
+     3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c
+     3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c
+     45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45
+     47 47 47 47 47 47 47 47 47 47 47 47 47 47 47 47
+     3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c
+     3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c
+     45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45
+     47 47 47 47 47 47 47 47 47 47 47 47 47 47 47 47
+     3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c
+     3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c
+     45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45
+     47 47 47 47 47 47 47 47 47 47 47 47 47 47 47 47
+     3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c 3c
+   ARP2:
+     40 40 40 40 40 40 40 40 40 40 40 40 40 40 40 40
+     48 48 48 48 48 48 48 48 48 48 48 48 48 48 48 48
+     4a 4a 4a 4a 4a 4a 4a 4a 4a 4a 4a 4a 4a 4a 4a 4a
+     40 40 40 40 40 40 40 40 40 40 40 40 40 40 40 40
+     40 40 40 40 40 40 40 40 40 40 40 40 40 40 40 40
+     48 48 48 48 48 48 48 48 48 48 48 48 48 48 48 48
+     4a 4a 4a 4a 4a 4a 4a 4a 4a 4a 4a 4a 4a 4a 4a 4a
+     40 40 40 40 40 40 40 40 40 40 40 40 40 40 40 40
+     40 40 40 40 40 40 40 40 40 40 40 40 40 40 40 40
+     48 48 48 48 48 48 48 48 48 48 48 48 48 48 48 48
+     4a 4a 4a 4a 4a 4a 4a 4a 4a 4a 4a 4a 4a 4a 4a 4a
+     40 40 40 40 40 40 40 40 40 40 40 40 40 40 40 40
+     40 40 40 40 40 40 40 40 40 40 40 40 40 40 40 40
+     48 48 48 48 48 48 48 48 48 48 48 48 48 48 48 48
+     4a 4a 4a 4a 4a 4a 4a 4a 4a 4a 4a 4a 4a 4a 4a 4a
+     40 40 40 40 40 40 40 40 40 40 40 40 40 40 40 40
+   DRUM:
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+   FILT:
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+
+----------------------------------------------------------------------------
+SLOT 11  SWEEP       "FILTER-SWEEP MONSTER"
+----------------------------------------------------------------------------
+  bass wave : SAW            arp wave : PULSE
+  speed     : 5 ticks/row    res15 route[V1]   LP vol15
+  bass ADSR : atk0 dec7 / sus9 rel8
+  arp  ADSR : atk0 dec0 / sus11 rel8
+  pwm base/step : $05 / $04     filt LFO step : $09
+  filter cutoff range : $08 .. $5f
+
+  core loop (bars 0-3, 16 steps each):
+   bar0 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: A0 A1 .. A2 A1 A1 .. A2 A0 A1 .. A2 A1 A1 .. A2
+        lead: A3 .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+        drum: KK hh hh hh KK hh hh hh KK hh hh hh KK hh hh hh
+
+   bar1 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: A0 A1 .. A2 A1 A1 .. A2 A0 A1 .. A2 A1 A1 .. A2
+        lead: A3 .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+        drum: KK hh hh hh KK hh hh hh KK hh hh hh KK hh hh hh
+
+   bar2 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: A0 A1 .. A2 A1 A1 .. A2 A0 A1 .. A2 A1 A1 .. A2
+        lead: A3 .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+        drum: KK hh hh hh KK hh hh hh KK hh hh hh KK hh hh hh
+
+   bar3 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: A0 A1 .. A2 A1 A1 .. A2 A0 A1 .. A2 A1 A1 .. A2
+        lead: A3 .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+        drum: KK hh hh hh KK hh hh hh KK hh hh hh KK hh hh hh
+
+  full raw dump (hex, all 16 bars):
+   BASS:
+     09 15 ff 21 15 15 ff 21 09 15 ff 21 15 15 ff 21
+     09 15 ff 21 15 15 ff 21 09 15 ff 21 15 15 ff 21
+     09 15 ff 21 15 15 ff 21 09 15 ff 21 15 15 ff 21
+     09 15 ff 21 15 15 ff 21 09 15 ff 21 15 15 ff 21
+     09 15 ff 21 15 15 ff 21 09 15 ff 21 15 15 ff 21
+     09 15 ff 21 15 15 ff 21 09 15 ff 21 15 15 ff 21
+     09 15 ff 21 15 15 ff 21 09 15 ff 21 15 15 ff 21
+     09 15 ff 21 15 15 ff 21 09 15 ff 21 15 15 ff 21
+     09 15 ff 21 15 15 ff 21 09 15 ff 21 15 15 ff 21
+     09 15 ff 21 15 15 ff 21 09 15 ff 21 15 15 ff 21
+     09 15 ff 21 15 15 ff 21 09 15 ff 21 15 15 ff 21
+     09 15 ff 21 15 15 ff 21 09 15 ff 21 15 15 ff 21
+     09 15 ff 21 15 15 ff 21 09 15 ff 21 15 15 ff 21
+     09 15 ff 21 15 15 ff 21 09 15 ff 21 15 15 ff 21
+     09 15 ff 21 15 15 ff 21 09 15 ff 21 15 15 ff 21
+     09 15 ff 21 15 15 ff 21 09 15 ff 21 15 15 ff 21
+   ARP0:
+     2d ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     2d ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     2d ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     2d ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     2d ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     2d ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     2d ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     2d ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     2d ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     2d ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     2d ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     2d ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     2d ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     2d ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     2d ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     2d ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+   ARP1:
+     30 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     30 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     30 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     30 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     30 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     30 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     30 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     30 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     30 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     30 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     30 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     30 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     30 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     30 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     30 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     30 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+   ARP2:
+     34 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     34 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     34 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     34 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     34 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     34 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     34 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     34 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     34 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     34 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     34 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     34 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     34 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     34 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     34 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+     34 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+   DRUM:
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+   FILT:
+     08 08 08 08 08 08 08 08 08 08 08 08 08 08 08 08
+     17 17 17 17 17 17 17 17 17 17 17 17 17 17 17 17
+     26 26 26 26 26 26 26 26 26 26 26 26 26 26 26 26
+     35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35
+     44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44
+     53 53 53 53 53 53 53 53 53 53 53 53 53 53 53 53
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+
+----------------------------------------------------------------------------
+SLOT 12  RING        "RING-MOD metallic"
+----------------------------------------------------------------------------
+  bass wave : SAW            arp wave : TRI++RING
+  speed     : 5 ticks/row    res15 route[V1+V2]   LP vol15
+  bass ADSR : atk0 dec6 / sus6 rel8
+  arp  ADSR : atk0 dec2 / sus7 rel8
+  pwm base/step : $04 / $05     filt LFO step : $06
+  filter cutoff range : $40 .. $5f
+
+  core loop (bars 0-3, 16 steps each):
+   bar0 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: A0 .. A1 .. A1 .. A1 .. A1 .. A1 .. A1 .. A1 ..
+        lead: A3 A3 A4 A3 E4 A3 A4 A3 A3 F4 A3 A4 E4 A3 A4 F5
+        drum: KK hh hh hh KK hh hh hh KK hh hh hh KK hh hh hh
+
+   bar1 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: A0 .. A1 .. A1 .. A1 .. A1 .. A1 .. A1 .. A1 ..
+        lead: A3 A3 A4 A3 E4 A3 A4 A3 A3 F4 A3 A4 E4 A3 A4 F5
+        drum: KK hh hh hh KK hh hh hh KK hh hh hh KK hh hh hh
+
+   bar2 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: G1 .. G2 .. G2 .. G2 .. G2 .. G2 .. G2 .. G2 ..
+        lead: G4 G4 G5 G4 D5 G4 G5 G4 G4 E5 G4 G5 D5 G4 G5 E6
+        drum: KK hh hh hh KK hh hh hh KK hh hh hh KK hh hh hh
+
+   bar3 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: A0 .. A1 .. A1 .. A1 .. A1 .. A1 .. A1 .. A1 ..
+        lead: A3 A3 A4 A3 E4 A3 A4 A3 A3 F4 A3 A4 E4 A3 A4 F5
+        drum: KK hh hh hh KK hh hh hh KK hh hh hh KK hh hh hh
+
+  full raw dump (hex, all 16 bars):
+   BASS:
+     09 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff
+     09 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff
+     13 ff 1f ff 1f ff 1f ff 1f ff 1f ff 1f ff 1f ff
+     09 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff
+     09 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff
+     09 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff
+     13 ff 1f ff 1f ff 1f ff 1f ff 1f ff 1f ff 1f ff
+     09 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff
+     09 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff
+     09 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff
+     13 ff 1f ff 1f ff 1f ff 1f ff 1f ff 1f ff 1f ff
+     09 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff
+     09 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff
+     09 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff
+     13 ff 1f ff 1f ff 1f ff 1f ff 1f ff 1f ff 1f ff
+     09 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff 15 ff
+   ARP0:
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+     37 37 43 37 3e 37 43 37 37 40 37 43 3e 37 43 4c
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+     37 37 43 37 3e 37 43 37 37 40 37 43 3e 37 43 4c
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+     37 37 43 37 3e 37 43 37 37 40 37 43 3e 37 43 4c
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+     37 37 43 37 3e 37 43 37 37 40 37 43 3e 37 43 4c
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+   ARP1:
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+     37 37 43 37 3e 37 43 37 37 40 37 43 3e 37 43 4c
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+     37 37 43 37 3e 37 43 37 37 40 37 43 3e 37 43 4c
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+     37 37 43 37 3e 37 43 37 37 40 37 43 3e 37 43 4c
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+     37 37 43 37 3e 37 43 37 37 40 37 43 3e 37 43 4c
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+   ARP2:
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+     37 37 43 37 3e 37 43 37 37 40 37 43 3e 37 43 4c
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+     37 37 43 37 3e 37 43 37 37 40 37 43 3e 37 43 4c
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+     37 37 43 37 3e 37 43 37 37 40 37 43 3e 37 43 4c
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+     37 37 43 37 3e 37 43 37 37 40 37 43 3e 37 43 4c
+     2d 2d 39 2d 34 2d 39 2d 2d 35 2d 39 34 2d 39 41
+   DRUM:
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+   FILT:
+     5f 5f 5f 5f 5f 5e 5b 58 55 52 4f 4c 49 46 43 40
+     5f 5f 5f 5f 5f 5e 5b 58 55 52 4f 4c 49 46 43 40
+     5f 5f 5f 5f 5f 5e 5b 58 55 52 4f 4c 49 46 43 40
+     5f 5f 5f 5f 5f 5e 5b 58 55 52 4f 4c 49 46 43 40
+     5f 5f 5f 5f 5f 5e 5b 58 55 52 4f 4c 49 46 43 40
+     5f 5f 5f 5f 5f 5e 5b 58 55 52 4f 4c 49 46 43 40
+     5f 5f 5f 5f 5f 5e 5b 58 55 52 4f 4c 49 46 43 40
+     5f 5f 5f 5f 5f 5e 5b 58 55 52 4f 4c 49 46 43 40
+     5f 5f 5f 5f 5f 5e 5b 58 55 52 4f 4c 49 46 43 40
+     5f 5f 5f 5f 5f 5e 5b 58 55 52 4f 4c 49 46 43 40
+     5f 5f 5f 5f 5f 5e 5b 58 55 52 4f 4c 49 46 43 40
+     5f 5f 5f 5f 5f 5e 5b 58 55 52 4f 4c 49 46 43 40
+     5f 5f 5f 5f 5f 5e 5b 58 55 52 4f 4c 49 46 43 40
+     5f 5f 5f 5f 5f 5e 5b 58 55 52 4f 4c 49 46 43 40
+     5f 5f 5f 5f 5f 5e 5b 58 55 52 4f 4c 49 46 43 40
+     5f 5f 5f 5f 5f 5e 5b 58 55 52 4f 4c 49 46 43 40
+
+----------------------------------------------------------------------------
+SLOT 13  SYNCL       "HARD-SYNC scream"
+----------------------------------------------------------------------------
+  bass wave : SAW            arp wave : TRI++SYNC
+  speed     : 5 ticks/row    res15 route[V1]   LP vol15
+  bass ADSR : atk0 dec8 / sus8 rel8
+  arp  ADSR : atk0 dec0 / sus10 rel8
+  pwm base/step : $04 / $03     filt LFO step : $05
+  filter cutoff range : $50 .. $5f
+
+  core loop (bars 0-3, 16 steps each):
+   bar0 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: A0 .. A1 .. A1 .. A2 .. A0 .. A1 .. A1 .. A2 ..
+        lead: A4 .. .. .. F4 .. .. .. E4 .. .. .. A4 .. .. ..
+        drum: KK .. hh .. CL .. hh .. KK .. hh .. CL .. hh ..
+
+   bar1 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: F1 .. F2 .. F2 .. F3 .. F1 .. F2 .. F2 .. F3 ..
+        lead: F5 .. .. .. D5 .. .. .. C5 .. .. .. F5 .. .. ..
+        drum: KK .. hh .. CL .. hh .. KK .. hh .. CL .. hh ..
+
+   bar2 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: G1 .. G2 .. G2 .. G3 .. G1 .. G2 .. G2 .. G3 ..
+        lead: G5 .. .. .. E5 .. .. .. D5 .. .. .. G5 .. .. ..
+        drum: KK .. hh .. CL .. hh .. KK .. hh .. CL .. hh ..
+
+   bar3 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: A0 .. A1 .. A1 .. A2 .. A0 .. A1 .. A1 .. A2 ..
+        lead: A4 .. .. .. F4 .. .. .. E4 .. .. .. A4 .. .. ..
+        drum: KK .. hh .. CL .. hh .. KK .. hh .. CL .. hh ..
+
+  full raw dump (hex, all 16 bars):
+   BASS:
+     09 ff 15 ff 15 ff 21 ff 09 ff 15 ff 15 ff 21 ff
+     11 ff 1d ff 1d ff 29 ff 11 ff 1d ff 1d ff 29 ff
+     13 ff 1f ff 1f ff 2b ff 13 ff 1f ff 1f ff 2b ff
+     09 ff 15 ff 15 ff 21 ff 09 ff 15 ff 15 ff 21 ff
+     09 ff 15 ff 15 ff 21 ff 09 ff 15 ff 15 ff 21 ff
+     11 ff 1d ff 1d ff 29 ff 11 ff 1d ff 1d ff 29 ff
+     13 ff 1f ff 1f ff 2b ff 13 ff 1f ff 1f ff 2b ff
+     09 ff 15 ff 15 ff 21 ff 09 ff 15 ff 15 ff 21 ff
+     09 ff 15 ff 15 ff 21 ff 09 ff 15 ff 15 ff 21 ff
+     11 ff 1d ff 1d ff 29 ff 11 ff 1d ff 1d ff 29 ff
+     13 ff 1f ff 1f ff 2b ff 13 ff 1f ff 1f ff 2b ff
+     09 ff 15 ff 15 ff 21 ff 09 ff 15 ff 15 ff 21 ff
+     09 ff 15 ff 15 ff 21 ff 09 ff 15 ff 15 ff 21 ff
+     11 ff 1d ff 1d ff 29 ff 11 ff 1d ff 1d ff 29 ff
+     13 ff 1f ff 1f ff 2b ff 13 ff 1f ff 1f ff 2b ff
+     09 ff 15 ff 15 ff 21 ff 09 ff 15 ff 15 ff 21 ff
+   ARP0:
+     39 ff ff ff 35 ff ff ff 34 ff ff ff 39 ff ff ff
+     41 ff ff ff 3e ff ff ff 3c ff ff ff 41 ff ff ff
+     43 ff ff ff 40 ff ff ff 3e ff ff ff 43 ff ff ff
+     39 ff ff ff 35 ff ff ff 34 ff ff ff 39 ff ff ff
+     39 ff ff ff 35 ff ff ff 34 ff ff ff 39 ff ff ff
+     41 ff ff ff 3e ff ff ff 3c ff ff ff 41 ff ff ff
+     43 ff ff ff 40 ff ff ff 3e ff ff ff 43 ff ff ff
+     39 ff ff ff 35 ff ff ff 34 ff ff ff 39 ff ff ff
+     39 ff ff ff 35 ff ff ff 34 ff ff ff 39 ff ff ff
+     41 ff ff ff 3e ff ff ff 3c ff ff ff 41 ff ff ff
+     43 ff ff ff 40 ff ff ff 3e ff ff ff 43 ff ff ff
+     39 ff ff ff 35 ff ff ff 34 ff ff ff 39 ff ff ff
+     39 ff ff ff 35 ff ff ff 34 ff ff ff 39 ff ff ff
+     41 ff ff ff 3e ff ff ff 3c ff ff ff 41 ff ff ff
+     43 ff ff ff 40 ff ff ff 3e ff ff ff 43 ff ff ff
+     39 ff ff ff 35 ff ff ff 34 ff ff ff 39 ff ff ff
+   ARP1:
+     39 ff ff ff 35 ff ff ff 34 ff ff ff 39 ff ff ff
+     41 ff ff ff 3e ff ff ff 3c ff ff ff 41 ff ff ff
+     43 ff ff ff 40 ff ff ff 3e ff ff ff 43 ff ff ff
+     39 ff ff ff 35 ff ff ff 34 ff ff ff 39 ff ff ff
+     39 ff ff ff 35 ff ff ff 34 ff ff ff 39 ff ff ff
+     41 ff ff ff 3e ff ff ff 3c ff ff ff 41 ff ff ff
+     43 ff ff ff 40 ff ff ff 3e ff ff ff 43 ff ff ff
+     39 ff ff ff 35 ff ff ff 34 ff ff ff 39 ff ff ff
+     39 ff ff ff 35 ff ff ff 34 ff ff ff 39 ff ff ff
+     41 ff ff ff 3e ff ff ff 3c ff ff ff 41 ff ff ff
+     43 ff ff ff 40 ff ff ff 3e ff ff ff 43 ff ff ff
+     39 ff ff ff 35 ff ff ff 34 ff ff ff 39 ff ff ff
+     39 ff ff ff 35 ff ff ff 34 ff ff ff 39 ff ff ff
+     41 ff ff ff 3e ff ff ff 3c ff ff ff 41 ff ff ff
+     43 ff ff ff 40 ff ff ff 3e ff ff ff 43 ff ff ff
+     39 ff ff ff 35 ff ff ff 34 ff ff ff 39 ff ff ff
+   ARP2:
+     39 ff ff ff 35 ff ff ff 34 ff ff ff 39 ff ff ff
+     41 ff ff ff 3e ff ff ff 3c ff ff ff 41 ff ff ff
+     43 ff ff ff 40 ff ff ff 3e ff ff ff 43 ff ff ff
+     39 ff ff ff 35 ff ff ff 34 ff ff ff 39 ff ff ff
+     39 ff ff ff 35 ff ff ff 34 ff ff ff 39 ff ff ff
+     41 ff ff ff 3e ff ff ff 3c ff ff ff 41 ff ff ff
+     43 ff ff ff 40 ff ff ff 3e ff ff ff 43 ff ff ff
+     39 ff ff ff 35 ff ff ff 34 ff ff ff 39 ff ff ff
+     39 ff ff ff 35 ff ff ff 34 ff ff ff 39 ff ff ff
+     41 ff ff ff 3e ff ff ff 3c ff ff ff 41 ff ff ff
+     43 ff ff ff 40 ff ff ff 3e ff ff ff 43 ff ff ff
+     39 ff ff ff 35 ff ff ff 34 ff ff ff 39 ff ff ff
+     39 ff ff ff 35 ff ff ff 34 ff ff ff 39 ff ff ff
+     41 ff ff ff 3e ff ff ff 3c ff ff ff 41 ff ff ff
+     43 ff ff ff 40 ff ff ff 3e ff ff ff 43 ff ff ff
+     39 ff ff ff 35 ff ff ff 34 ff ff ff 39 ff ff ff
+   DRUM:
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+     01 00 02 00 03 00 02 00 01 00 02 00 03 00 02 00
+   FILT:
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5c 59 56 53 50
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5c 59 56 53 50
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5c 59 56 53 50
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5c 59 56 53 50
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5c 59 56 53 50
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5c 59 56 53 50
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5c 59 56 53 50
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5c 59 56 53 50
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5c 59 56 53 50
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5c 59 56 53 50
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5c 59 56 53 50
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5c 59 56 53 50
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5c 59 56 53 50
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5c 59 56 53 50
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5c 59 56 53 50
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5c 59 56 53 50
+
+----------------------------------------------------------------------------
+SLOT 14  GATET       "GATE-STUTTER trance"
+----------------------------------------------------------------------------
+  bass wave : SAW+PULSE      arp wave : PULSE
+  speed     : 5 ticks/row    res15 route[V1+V2]   LP vol15
+  bass ADSR : atk0 dec5 / sus7 rel8
+  arp  ADSR : atk0 dec0 / sus2 rel8
+  pwm base/step : $04 / $06     filt LFO step : $07
+  filter cutoff range : $5f .. $5f
+
+  core loop (bars 0-3, 16 steps each):
+   bar0 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: A0 .. A1 A2 .. .. A1 .. A0 .. A1 A2 .. .. A1 ..
+        lead: A3 .. A3 A3 .. A3 A3 .. A3 .. A3 A3 .. A3 .. A3
+        drum: KK hh hh hh CL hh hh hh KK hh hh hh CL hh hh hh
+
+   bar1 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: A0 .. A1 A2 .. .. A1 .. A0 .. A1 A2 .. .. A1 ..
+        lead: A3 .. A3 A3 .. A3 A3 .. A3 .. A3 A3 .. A3 .. A3
+        drum: KK hh hh hh CL hh hh hh KK hh hh hh CL hh hh hh
+
+   bar2 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: F1 .. F2 F3 .. .. F2 .. F1 .. F2 F3 .. .. F2 ..
+        lead: F4 .. F4 F4 .. F4 F4 .. F4 .. F4 F4 .. F4 .. F4
+        drum: KK hh hh hh CL hh hh hh KK hh hh hh CL hh hh hh
+
+   bar3 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: F1 .. F2 F3 .. .. F2 .. F1 .. F2 F3 .. .. F2 ..
+        lead: F4 .. F4 F4 .. F4 F4 .. F4 .. F4 F4 .. F4 .. F4
+        drum: KK hh hh hh CL hh hh hh KK hh hh hh CL hh hh hh
+
+  full raw dump (hex, all 16 bars):
+   BASS:
+     09 ff 15 21 ff ff 15 ff 09 ff 15 21 ff ff 15 ff
+     09 ff 15 21 ff ff 15 ff 09 ff 15 21 ff ff 15 ff
+     11 ff 1d 29 ff ff 1d ff 11 ff 1d 29 ff ff 1d ff
+     11 ff 1d 29 ff ff 1d ff 11 ff 1d 29 ff ff 1d ff
+     09 ff 15 21 ff ff 15 ff 09 ff 15 21 ff ff 15 ff
+     09 ff 15 21 ff ff 15 ff 09 ff 15 21 ff ff 15 ff
+     11 ff 1d 29 ff ff 1d ff 11 ff 1d 29 ff ff 1d ff
+     11 ff 1d 29 ff ff 1d ff 11 ff 1d 29 ff ff 1d ff
+     09 ff 15 21 ff ff 15 ff 09 ff 15 21 ff ff 15 ff
+     09 ff 15 21 ff ff 15 ff 09 ff 15 21 ff ff 15 ff
+     11 ff 1d 29 ff ff 1d ff 11 ff 1d 29 ff ff 1d ff
+     11 ff 1d 29 ff ff 1d ff 11 ff 1d 29 ff ff 1d ff
+     09 ff 15 21 ff ff 15 ff 09 ff 15 21 ff ff 15 ff
+     09 ff 15 21 ff ff 15 ff 09 ff 15 21 ff ff 15 ff
+     11 ff 1d 29 ff ff 1d ff 11 ff 1d 29 ff ff 1d ff
+     11 ff 1d 29 ff ff 1d ff 11 ff 1d 29 ff ff 1d ff
+   ARP0:
+     2d ff 2d 2d ff 2d 2d ff 2d ff 2d 2d ff 2d ff 2d
+     2d ff 2d 2d ff 2d 2d ff 2d ff 2d 2d ff 2d ff 2d
+     35 ff 35 35 ff 35 35 ff 35 ff 35 35 ff 35 ff 35
+     35 ff 35 35 ff 35 35 ff 35 ff 35 35 ff 35 ff 35
+     2d ff 2d 2d ff 2d 2d ff 2d ff 2d 2d ff 2d ff 2d
+     2d ff 2d 2d ff 2d 2d ff 2d ff 2d 2d ff 2d ff 2d
+     35 ff 35 35 ff 35 35 ff 35 ff 35 35 ff 35 ff 35
+     35 ff 35 35 ff 35 35 ff 35 ff 35 35 ff 35 ff 35
+     2d ff 2d 2d ff 2d 2d ff 2d ff 2d 2d ff 2d ff 2d
+     2d ff 2d 2d ff 2d 2d ff 2d ff 2d 2d ff 2d ff 2d
+     35 ff 35 35 ff 35 35 ff 35 ff 35 35 ff 35 ff 35
+     35 ff 35 35 ff 35 35 ff 35 ff 35 35 ff 35 ff 35
+     2d ff 2d 2d ff 2d 2d ff 2d ff 2d 2d ff 2d ff 2d
+     2d ff 2d 2d ff 2d 2d ff 2d ff 2d 2d ff 2d ff 2d
+     35 ff 35 35 ff 35 35 ff 35 ff 35 35 ff 35 ff 35
+     35 ff 35 35 ff 35 35 ff 35 ff 35 35 ff 35 ff 35
+   ARP1:
+     30 ff 30 30 ff 30 30 ff 30 ff 30 30 ff 30 ff 30
+     30 ff 30 30 ff 30 30 ff 30 ff 30 30 ff 30 ff 30
+     39 ff 39 39 ff 39 39 ff 39 ff 39 39 ff 39 ff 39
+     39 ff 39 39 ff 39 39 ff 39 ff 39 39 ff 39 ff 39
+     30 ff 30 30 ff 30 30 ff 30 ff 30 30 ff 30 ff 30
+     30 ff 30 30 ff 30 30 ff 30 ff 30 30 ff 30 ff 30
+     39 ff 39 39 ff 39 39 ff 39 ff 39 39 ff 39 ff 39
+     39 ff 39 39 ff 39 39 ff 39 ff 39 39 ff 39 ff 39
+     30 ff 30 30 ff 30 30 ff 30 ff 30 30 ff 30 ff 30
+     30 ff 30 30 ff 30 30 ff 30 ff 30 30 ff 30 ff 30
+     39 ff 39 39 ff 39 39 ff 39 ff 39 39 ff 39 ff 39
+     39 ff 39 39 ff 39 39 ff 39 ff 39 39 ff 39 ff 39
+     30 ff 30 30 ff 30 30 ff 30 ff 30 30 ff 30 ff 30
+     30 ff 30 30 ff 30 30 ff 30 ff 30 30 ff 30 ff 30
+     39 ff 39 39 ff 39 39 ff 39 ff 39 39 ff 39 ff 39
+     39 ff 39 39 ff 39 39 ff 39 ff 39 39 ff 39 ff 39
+   ARP2:
+     34 ff 34 34 ff 34 34 ff 34 ff 34 34 ff 34 ff 34
+     34 ff 34 34 ff 34 34 ff 34 ff 34 34 ff 34 ff 34
+     3c ff 3c 3c ff 3c 3c ff 3c ff 3c 3c ff 3c ff 3c
+     3c ff 3c 3c ff 3c 3c ff 3c ff 3c 3c ff 3c ff 3c
+     34 ff 34 34 ff 34 34 ff 34 ff 34 34 ff 34 ff 34
+     34 ff 34 34 ff 34 34 ff 34 ff 34 34 ff 34 ff 34
+     3c ff 3c 3c ff 3c 3c ff 3c ff 3c 3c ff 3c ff 3c
+     3c ff 3c 3c ff 3c 3c ff 3c ff 3c 3c ff 3c ff 3c
+     34 ff 34 34 ff 34 34 ff 34 ff 34 34 ff 34 ff 34
+     34 ff 34 34 ff 34 34 ff 34 ff 34 34 ff 34 ff 34
+     3c ff 3c 3c ff 3c 3c ff 3c ff 3c 3c ff 3c ff 3c
+     3c ff 3c 3c ff 3c 3c ff 3c ff 3c 3c ff 3c ff 3c
+     34 ff 34 34 ff 34 34 ff 34 ff 34 34 ff 34 ff 34
+     34 ff 34 34 ff 34 34 ff 34 ff 34 34 ff 34 ff 34
+     3c ff 3c 3c ff 3c 3c ff 3c ff 3c 3c ff 3c ff 3c
+     3c ff 3c 3c ff 3c 3c ff 3c ff 3c 3c ff 3c ff 3c
+   DRUM:
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+     01 02 02 02 03 02 02 02 01 02 02 02 03 02 02 02
+   FILT:
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+
+----------------------------------------------------------------------------
+SLOT 15  ACIDMAX     "SELF-OSC ACID"
+----------------------------------------------------------------------------
+  bass wave : SAW            arp wave : PULSE
+  speed     : 5 ticks/row    res15 route[V1+V2]   LP vol15
+  bass ADSR : atk0 dec6 / sus5 rel8
+  arp  ADSR : atk0 dec2 / sus5 rel8
+  pwm base/step : $04 / $05     filt LFO step : $0b
+  filter cutoff range : $10 .. $5f
+
+  core loop (bars 0-3, 16 steps each):
+   bar0 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: A0 .. A1 A2 A1 .. A1 A2 A1 .. A1 A2 A1 .. A1 A2
+        lead: A3 F5 A3 A4 D4 A3 F5 A3 F4 F5 A3 A4 D4 F5 A3 A4
+        drum: KK hh hh hh KK hh hh hh KK hh hh hh KK hh hh hh
+
+   bar1 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: A0 .. A1 A2 A1 .. A1 A2 A1 .. A1 A2 A1 .. A1 A2
+        lead: A3 F5 A3 A4 D4 A3 F5 A3 F4 F5 A3 A4 D4 F5 A3 A4
+        drum: KK hh hh hh KK hh hh hh KK hh hh hh KK hh hh hh
+
+   bar2 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: D1 .. D2 D3 D2 .. D2 D3 D2 .. D2 D3 D2 .. D2 D3
+        lead: D4 B5 D4 D5 G4 D4 B5 D4 B4 B5 D4 D5 G4 B5 D4 D5
+        drum: KK hh hh hh KK hh hh hh KK hh hh hh KK hh hh hh
+
+   bar3 step:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+        bass: D1 .. D2 D3 D2 .. D2 D3 D2 .. D2 D3 D2 .. D2 D3
+        lead: D4 B5 D4 D5 G4 D4 B5 D4 B4 B5 D4 D5 G4 B5 D4 D5
+        drum: KK hh hh hh KK hh hh hh KK hh hh hh KK hh hh hh
+
+  full raw dump (hex, all 16 bars):
+   BASS:
+     09 ff 15 21 15 ff 15 21 15 ff 15 21 15 ff 15 21
+     09 ff 15 21 15 ff 15 21 15 ff 15 21 15 ff 15 21
+     0e ff 1a 26 1a ff 1a 26 1a ff 1a 26 1a ff 1a 26
+     0e ff 1a 26 1a ff 1a 26 1a ff 1a 26 1a ff 1a 26
+     09 ff 15 21 15 ff 15 21 15 ff 15 21 15 ff 15 21
+     09 ff 15 21 15 ff 15 21 15 ff 15 21 15 ff 15 21
+     0e ff 1a 26 1a ff 1a 26 1a ff 1a 26 1a ff 1a 26
+     0e ff 1a 26 1a ff 1a 26 1a ff 1a 26 1a ff 1a 26
+     09 ff 15 21 15 ff 15 21 15 ff 15 21 15 ff 15 21
+     09 ff 15 21 15 ff 15 21 15 ff 15 21 15 ff 15 21
+     0e ff 1a 26 1a ff 1a 26 1a ff 1a 26 1a ff 1a 26
+     0e ff 1a 26 1a ff 1a 26 1a ff 1a 26 1a ff 1a 26
+     09 ff 15 21 15 ff 15 21 15 ff 15 21 15 ff 15 21
+     09 ff 15 21 15 ff 15 21 15 ff 15 21 15 ff 15 21
+     0e ff 1a 26 1a ff 1a 26 1a ff 1a 26 1a ff 1a 26
+     0e ff 1a 26 1a ff 1a 26 1a ff 1a 26 1a ff 1a 26
+   ARP0:
+     2d 41 2d 39 32 2d 41 2d 35 41 2d 39 32 41 2d 39
+     2d 41 2d 39 32 2d 41 2d 35 41 2d 39 32 41 2d 39
+     32 47 32 3e 37 32 47 32 3b 47 32 3e 37 47 32 3e
+     32 47 32 3e 37 32 47 32 3b 47 32 3e 37 47 32 3e
+     2d 41 2d 39 32 2d 41 2d 35 41 2d 39 32 41 2d 39
+     2d 41 2d 39 32 2d 41 2d 35 41 2d 39 32 41 2d 39
+     32 47 32 3e 37 32 47 32 3b 47 32 3e 37 47 32 3e
+     32 47 32 3e 37 32 47 32 3b 47 32 3e 37 47 32 3e
+     2d 41 2d 39 32 2d 41 2d 35 41 2d 39 32 41 2d 39
+     2d 41 2d 39 32 2d 41 2d 35 41 2d 39 32 41 2d 39
+     32 47 32 3e 37 32 47 32 3b 47 32 3e 37 47 32 3e
+     32 47 32 3e 37 32 47 32 3b 47 32 3e 37 47 32 3e
+     2d 41 2d 39 32 2d 41 2d 35 41 2d 39 32 41 2d 39
+     2d 41 2d 39 32 2d 41 2d 35 41 2d 39 32 41 2d 39
+     32 47 32 3e 37 32 47 32 3b 47 32 3e 37 47 32 3e
+     32 47 32 3e 37 32 47 32 3b 47 32 3e 37 47 32 3e
+   ARP1:
+     2d 41 2d 39 32 2d 41 2d 35 41 2d 39 32 41 2d 39
+     2d 41 2d 39 32 2d 41 2d 35 41 2d 39 32 41 2d 39
+     32 47 32 3e 37 32 47 32 3b 47 32 3e 37 47 32 3e
+     32 47 32 3e 37 32 47 32 3b 47 32 3e 37 47 32 3e
+     2d 41 2d 39 32 2d 41 2d 35 41 2d 39 32 41 2d 39
+     2d 41 2d 39 32 2d 41 2d 35 41 2d 39 32 41 2d 39
+     32 47 32 3e 37 32 47 32 3b 47 32 3e 37 47 32 3e
+     32 47 32 3e 37 32 47 32 3b 47 32 3e 37 47 32 3e
+     2d 41 2d 39 32 2d 41 2d 35 41 2d 39 32 41 2d 39
+     2d 41 2d 39 32 2d 41 2d 35 41 2d 39 32 41 2d 39
+     32 47 32 3e 37 32 47 32 3b 47 32 3e 37 47 32 3e
+     32 47 32 3e 37 32 47 32 3b 47 32 3e 37 47 32 3e
+     2d 41 2d 39 32 2d 41 2d 35 41 2d 39 32 41 2d 39
+     2d 41 2d 39 32 2d 41 2d 35 41 2d 39 32 41 2d 39
+     32 47 32 3e 37 32 47 32 3b 47 32 3e 37 47 32 3e
+     32 47 32 3e 37 32 47 32 3b 47 32 3e 37 47 32 3e
+   ARP2:
+     2d 41 2d 39 32 2d 41 2d 35 41 2d 39 32 41 2d 39
+     2d 41 2d 39 32 2d 41 2d 35 41 2d 39 32 41 2d 39
+     32 47 32 3e 37 32 47 32 3b 47 32 3e 37 47 32 3e
+     32 47 32 3e 37 32 47 32 3b 47 32 3e 37 47 32 3e
+     2d 41 2d 39 32 2d 41 2d 35 41 2d 39 32 41 2d 39
+     2d 41 2d 39 32 2d 41 2d 35 41 2d 39 32 41 2d 39
+     32 47 32 3e 37 32 47 32 3b 47 32 3e 37 47 32 3e
+     32 47 32 3e 37 32 47 32 3b 47 32 3e 37 47 32 3e
+     2d 41 2d 39 32 2d 41 2d 35 41 2d 39 32 41 2d 39
+     2d 41 2d 39 32 2d 41 2d 35 41 2d 39 32 41 2d 39
+     32 47 32 3e 37 32 47 32 3b 47 32 3e 37 47 32 3e
+     32 47 32 3e 37 32 47 32 3b 47 32 3e 37 47 32 3e
+     2d 41 2d 39 32 2d 41 2d 35 41 2d 39 32 41 2d 39
+     2d 41 2d 39 32 2d 41 2d 35 41 2d 39 32 41 2d 39
+     32 47 32 3e 37 32 47 32 3b 47 32 3e 37 47 32 3e
+     32 47 32 3e 37 32 47 32 3b 47 32 3e 37 47 32 3e
+   DRUM:
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+     01 02 02 02 01 02 02 02 01 02 02 02 01 02 02 02
+   FILT:
+     10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10
+     2c 2c 2c 2c 2c 2c 2c 2c 2c 2c 2c 2c 2c 2c 2c 2c
+     48 48 48 48 48 48 48 48 48 48 48 48 48 48 48 48
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     48 48 48 48 48 48 48 48 48 48 48 48 48 48 48 48
+     2c 2c 2c 2c 2c 2c 2c 2c 2c 2c 2c 2c 2c 2c 2c 2c
+     10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10
+     2c 2c 2c 2c 2c 2c 2c 2c 2c 2c 2c 2c 2c 2c 2c 2c
+     48 48 48 48 48 48 48 48 48 48 48 48 48 48 48 48
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f 5f
+     48 48 48 48 48 48 48 48 48 48 48 48 48 48 48 48
+     2c 2c 2c 2c 2c 2c 2c 2c 2c 2c 2c 2c 2c 2c 2c 2c

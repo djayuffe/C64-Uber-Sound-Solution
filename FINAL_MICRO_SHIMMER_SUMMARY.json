@@ -1,0 +1,23 @@
+{
+  "final": "uber_sound_solution_arpsid_micro_shimmer_eyecandy_prg_enabled",
+  "micro_shimmer": true,
+  "bitmap_phase": true,
+  "sprite_tail": true,
+  "black_border_preserved": true,
+  "text_stable": true,
+  "depthpulse": true,
+  "groove_polish": true,
+  "instrument_filter_fix": true,
+  "music_theory_fix": true,
+  "post_fix_non_scale_notes": 0,
+  "hard_acid": true,
+  "no_intro": true,
+  "extended_peak": true,
+  "patterns": 60,
+  "pointer_entries": 61,
+  "h_order_bytes": 289,
+  "message_bytes": 32,
+  "asset_end": "$9f9b",
+  "margin_to_a000_bytes": 101,
+  "prg_generation_enabled": true
+}
