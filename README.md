@@ -38,3 +38,7 @@ portable build entry point.
 - wider AcidLfo
 - filter routes V1+V2+V3
 - LP+BP acid filter retained
+
+## Live VICE capture
+
+![Running C64 Uber Sound Solution](assets/live-vice.png)
