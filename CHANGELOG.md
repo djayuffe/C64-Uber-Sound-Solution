@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented here.
 
+## 1.0.1 — 2026-09-27
+
+- Added two verified VICE runtime captures and a fully described README gallery.
+- Extended build and published-release CI with POSIX shell validation for the
+  documented launcher scripts.
+
 ## 1.0.0 — 2026-09-27
 
 First cleaned public release.

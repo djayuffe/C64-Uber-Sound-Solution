@@ -34,9 +34,10 @@ so both entry points stay consistent.
 ## CI and releases
 
 The build workflow runs on pull requests, `main`, version tags, and manual
-dispatch. It installs ACME, runs `make clean && make`, checks the complete
-SHA-256 manifest, and stores the PRG as an artifact. The release workflow
-repeats those checks when a GitHub release is published.
+dispatch. It installs ACME and ShellCheck, runs `make clean && make`, validates
+the POSIX launcher scripts, checks the complete SHA-256 manifest, and stores
+the PRG as an artifact. The release workflow repeats those checks when a GitHub
+release is published.
 
 For a new release, update `VERSION` and `CHANGELOG.md`, run the local commands
 above, update `SHA256SUMS.txt`, tag `vX.Y.Z`, and publish the PRG plus checksum

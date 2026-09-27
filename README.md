@@ -10,7 +10,32 @@ music engine. The source is written in 6502 assembly and builds with ACME.
 Copyright (C) 2026 Ulf Bertilsson. Licensed under the
 [GNU General Public License v3.0 only](LICENSE); see [NOTICE](NOTICE).
 
+## Live VICE captures
+
+Every image below is an unedited VICE framebuffer from the assembled PRG. The
+demo changes on every music tick, so the frames show separate moments in one
+continuous run rather than static artwork or mockups.
+
+### Main bitmap and scroller scene
+
 ![Running C64 Uber Sound Solution in VICE](assets/live-vice.png)
+
+The bitmap logo, upper sprite field, black border, and lower sine scroller are
+all active at once.
+
+### Later music and scroller phase
+
+![Later VICE runtime phase](assets/live-vice-late.png)
+
+This capture shows the later colour and scroller position reached after the
+SID pattern player has continued through the sequence.
+
+### Alternate sprite and scroller state
+
+![Alternate VICE runtime phase](assets/live-vice-scroller.png)
+
+The beat-driven sprite positions and lower message continue to evolve while
+the bitmap stays in its black-border presentation.
 
 ## Features
 
@@ -84,14 +109,14 @@ shasum -a 256 -c SHA256SUMS.txt
 ```
 
 `SHA256SUMS.txt` covers every tracked release file except itself. GitHub Actions
-runs the same clean build and checksum verification for pull requests, pushes,
-version tags, and published releases; successful workflows retain the PRG as a
-downloadable artifact.
+runs the same clean build, shell-script validation, and checksum verification
+for pull requests, pushes, version tags, and published releases; successful
+workflows retain the PRG as a downloadable artifact.
 
 ## Repository layout
 
 - `src/uber_intro.asm` — the single authoritative 6502 source file.
-- `assets/` — bitmap, screen, colour, charset, and direct VICE runtime image.
+- `assets/` — bitmap, screen, colour, charset, and three direct VICE frames.
 - `source_music/` — human-readable source material for the composition.
 - `tools/` — focused static integrity checks used by `make verify`.
 - `docs/DEVELOPMENT.md` — build, runtime contract, CI, and release guide.

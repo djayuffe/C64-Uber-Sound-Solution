@@ -15,10 +15,10 @@ jobs:
       - name: Check out release source
         uses: actions/checkout@v4
 
-      - name: Install ACME
+      - name: Install build tools
         run: |
           sudo apt-get update
-          sudo apt-get install --yes acme
+          sudo apt-get install --yes acme shellcheck
           acme --version
 
       - name: Rebuild and verify
@@ -26,6 +26,7 @@ jobs:
           make clean
           make
           shasum -a 256 -c SHA256SUMS.txt
+          shellcheck --shell=sh make.sh vice_run.sh
 
       - name: Preserve verified PRG
         uses: actions/upload-artifact@v4
