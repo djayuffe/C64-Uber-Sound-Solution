@@ -1,0 +1,39 @@
+name: Build and verify
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Install ACME
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes acme
+          acme --version
+
+      - name: Build and run source checks
+        run: |
+          make clean
+          make
+
+      - name: Verify release manifest
+        run: shasum -a 256 -c SHA256SUMS.txt
+
+      - name: Upload assembled PRG
+        uses: actions/upload-artifact@v4
+        with:
+          name: c64-uber-sound-solution-prg
+          path: build/uber_sound_solution.prg
+          if-no-files-found: error

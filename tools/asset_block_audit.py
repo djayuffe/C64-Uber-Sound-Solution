@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Ulf Bertilsson
+# SPDX-License-Identifier: GPL-3.0-only
 from pathlib import Path
 import re, sys
 ROOT=Path(__file__).resolve().parents[1]
@@ -23,7 +25,7 @@ require('BorderIdle,x' not in s, 'border idle palette write returned')
 expected={'Message':32,'TopLineText':40,'TopLineColor':40,'StarSpriteData':64,'StarColorInit':4,'AcidLfo':16,'H_order':289,'SpriteBeatX0':16,'SpriteBeatX1':16,'SpriteBeatX2':16,'SpriteBeatX3':16,'DepthExpandX':16,'DepthExpandY':16,'MicroShimmer':16,'H_bpat_lo':61,'H_bpat_hi':61,'H_dpat_lo':61,'H_dpat_hi':61,'H_lpat_lo':61,'H_lpat_hi':61,'H_freqlo':96,'H_freqhi':96}
 for lab,n in expected.items():
     require(count(lab)==n, f'{lab}={count(lab)} expected {n}')
-require('acme -f cbm -o build/uber_sound_solution.prg src/uber_intro.asm' in (ROOT/'make.sh').read_text(), 'make.sh must generate PRG')
+require('$(ACME) --strict-segments -f cbm -o $@ $(SOURCE)' in (ROOT/'Makefile').read_text(), 'Makefile must generate PRG with strict segments')
 if errors:
     print('FAIL: micro shimmer audit')
     for e in errors: print(' -',e)

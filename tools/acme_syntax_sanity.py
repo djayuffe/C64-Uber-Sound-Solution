@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Ulf Bertilsson
+# SPDX-License-Identifier: GPL-3.0-only
 from pathlib import Path
 import re, sys
 ROOT=Path(__file__).resolve().parents[1]
@@ -34,10 +36,12 @@ for i in range(4,8):
     if count(f'SpriteBeatY{i}') != -1: err(f'SpriteBeatY{i} should be removed')
 for token in [
     'bne EffectTick_Active',
-    'jmp EffectTick_Idle          ; long-safe: active block is too large for BEQ','; BERLINFULL:','jmp ScrollerDraw_DrawLoop ; long-safe bottom3 sine','sta $d01d','sta $d017']:
+    'jmp EffectTick_Idle          ; long-safe: active block is too large for BEQ','; C64 Uber Sound Solution','jmp ScrollerDraw_DrawLoop ; long-safe bottom3 sine','sta $d01d','sta $d017']:
     if token not in s: err(f'missing {token}')
 pre=s.split('!if * > BITMAP_ADDR',1)[0]
 if 'TopLineText:' in pre or 'Message:' in pre: err('scroller text tables after code guard failed')
+require_build = '$(ACME) --strict-segments -f cbm -o $@ $(SOURCE)' in (ROOT/'Makefile').read_text()
+if not require_build: err('Makefile must generate the PRG with strict segments')
 if errors:
     print('FAIL: ACME syntax sanity')
     for e in errors: print(' -',e)

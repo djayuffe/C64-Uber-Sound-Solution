@@ -1,7 +1,0 @@
-ACME not installed in this runtime, so PRG was not generated here.
-
-Package is configured to generate PRG locally:
-  ./make.sh
-
-Expected output:
-  build/uber_sound_solution.prg

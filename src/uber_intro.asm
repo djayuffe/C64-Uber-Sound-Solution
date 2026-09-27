@@ -1,13 +1,9 @@
 ; =============================================================================
-; FINAL HARDENING: no dot-local labels, message immediate safe, long branches guarded.
-; EXTACID: extra peak repeat SLOT10-15, still starts at SLOT4 TECHNOA.
-; ARPSIDTECHACID: ARPSID technical scroller text plus acid filter/arp LFO instrument polish.
-; A000POLISH: one active sprite shape, more asset margin, stricter guard.
-; A000FIX: H_order duplicate repeat removed so asset block stays below $a000.
-; FULLAUDITFIX: strict full source audit cleanup, stale files removed, 4-sprite table fixed.
-; BERLINFULL: music from uploaded music(5).txt, previous music removed, PRG build enabled.
-; EYEANDU: bottom3 sine only, own top line, reactive top sprites.
-; UBER SOUND SOLUTION — ARPSID FEATURES SINE SCROLLER + BERLIN MUSIC
+; C64 Uber Sound Solution — bitmap, raster, and SID music demo
+; Copyright (C) 2026 Ulf Bertilsson
+; SPDX-FileCopyrightText: 2026 Ulf Bertilsson
+; SPDX-License-Identifier: GPL-3.0-only
+; PAL C64 / MOS 8580-oriented. BASIC loader: 10 SYS4096.
 ; BASIC: 10 SYS4096
 ; =============================================================================
 
